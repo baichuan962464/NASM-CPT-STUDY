@@ -2,7 +2,11 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#101217">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="./icon-180.png">
 <title>NASM-CPT 学习中心 V2 · 预览版</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b0e14"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CPT学习"><link rel="apple-touch-icon" href="icon-180.png">
@@ -222,9 +226,21 @@ body{line-height:1.65}
 .v21-gloss{display:grid;gap:8px;margin-top:13px}.v21-gloss>div{background:white;border:1px solid #e2e6ef;border-radius:10px;padding:12px;display:grid;gap:2px}.v21-gloss strong{font-size:14px;color:#172033}.v21-gloss span{font-size:12px;color:#69758b}.v21-gloss b{font-size:13px;color:#bc6b13}.v21-muted{font-size:12px;color:#687387}
 @media(max-width:560px){.main{padding:16px 13px 100px}.v2-tools{gap:7px}.v2-tools button{min-height:40px}.obj-head .otx{font-size:15px}.pts li{font-size:14px;line-height:1.85}.v21-flow small{font-size:8px}.v21-stage{padding:13px}}
 </style>
+<style id="cpt-premium">
+:root{--paper:#f5f5f2;--card:#fff;--bd:#e8e8e4;--ink:#14161a;--ink2:#1c1e23;--tx:#1a1b1f;--mut:#72747a;--org:#c18d55;--org2:#d6ac76;--orgsoft:#f8f0e5;--green:#328467;--shadow:0 8px 30px rgba(22,23,26,.045)}
+html{scroll-behavior:auto}body{background:var(--paper);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang SC',sans-serif;letter-spacing:.01em;overscroll-behavior-y:contain}
+.app{grid-template-columns:272px minmax(0,1fr)}.side{background:#131519}.side .logo{background:#25282f;color:#e9d4b7}.chap.active{background:#353332;color:#fff}.main{max-width:1000px;padding:22px 30px 100px;margin:0 auto}.cpt-apphead{display:flex;align-items:center;gap:11px;margin-bottom:23px}.cpt-headlogo{width:41px;height:41px;border-radius:13px;background:#15171b;color:#fff;display:grid;place-items:center;font-weight:800;font-size:23px;letter-spacing:-2px}.cpt-headlogo span{color:#d1aa75}.cpt-headtext{display:flex;flex-direction:column;line-height:1.25}.cpt-headtext strong{font-size:13px;letter-spacing:1.5px}.cpt-headtext small{font-size:10px;color:#88898e;margin-top:4px}.cpt-version{margin-left:auto;border:1px solid #e1dfda;border-radius:30px;padding:5px 10px;color:#72716f;font-size:11px;font-weight:700}.cpt-side-home{width:100%;background:#25282e;border:1px solid #34373f;border-radius:10px;color:#f5f5f5;padding:12px;text-align:left;font-size:14px;cursor:pointer;margin:12px 0}
+.topbar{align-items:flex-start;gap:15px}.ch-head h2{font-size:25px;line-height:1.32;font-weight:780;letter-spacing:-.5px}.ch-head .sub{font-size:12px;line-height:1.6}.tabs{background:#e9e9e6}.tabs button{white-space:nowrap}.tabs button.on{background:#fff}.obj-card{border-radius:17px;box-shadow:var(--shadow);border-color:#e9e9e7}.obj-head{padding:19px 17px;align-items:center}.obj-head .idx{background:#1a1c21;border-radius:9px;width:30px;height:30px;flex-basis:30px}.obj-head .otx{font-weight:680}.obj-body{padding-bottom:19px}.pts li{font-size:14px;line-height:1.95;color:#42444b}.kw{background:#f0eee9;color:#6b5d4d}.mbtn.on{color:#267b5d}.flash-stage{border-radius:19px}.v2-panel{position:relative;border-radius:18px;padding:20px;box-shadow:var(--shadow);scroll-margin-top:20px}.cpt-panel-close{position:absolute;right:14px;top:12px;border:0;background:#f2f2f0;border-radius:50%;height:30px;width:30px;color:#606269;cursor:pointer}
+.v2-tools{display:grid;grid-template-columns:minmax(0,1fr) repeat(6,auto);gap:8px}.v2-tools input{min-width:0;width:100%;background:#fff}.v2-tools button{min-width:0;white-space:nowrap;font-weight:650}.v21-top{background:#181b20}.v21-badge{background:#1c1e22}.v21-flow b{color:#b78b58}.v2-figure{background:#f6f5f2}
+.cpt-bottom{display:none}.cpt-home{padding-bottom:25px}.cpt-hero{background:#191b20;color:#fff;border-radius:25px;padding:26px 23px;position:relative;overflow:hidden;box-shadow:0 12px 35px #17181c14}.cpt-hero:after{content:'';position:absolute;width:260px;height:260px;right:-140px;top:-100px;border:1px solid #b7a1804a;border-radius:50%;box-shadow:0 0 0 38px #a69b8720,0 0 0 85px #a69b870b;pointer-events:none}.cpt-eyebrow{color:#cdb58e;font-size:11px;letter-spacing:2px;font-weight:750}.cpt-hero h1{font-size:30px;letter-spacing:-1px;margin:14px 0 10px;line-height:1.2}.cpt-hero p{color:#c3c3c5;font-size:13px;line-height:1.8;max-width:380px}.cpt-hero button{background:#e9d1ad;border:0;border-radius:12px;color:#25201b;font-size:14px;font-weight:800;padding:13px 17px;margin-top:19px;position:relative;z-index:1}.cpt-hero small{display:block;color:#a5a5a7;font-size:11px;margin-top:12px}.cpt-sectiontitle{display:flex;justify-content:space-between;align-items:center;margin:25px 0 12px}.cpt-sectiontitle h2{font-size:17px;letter-spacing:-.4px}.cpt-sectiontitle span{font-size:11px;color:#8b8b8b}.cpt-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.cpt-stat{background:#fff;border:1px solid #e9e8e5;border-radius:17px;padding:16px 13px}.cpt-stat strong{font-size:24px;display:block;font-variant-numeric:tabular-nums}.cpt-stat small{font-size:11px;color:#7c7d80;line-height:1.5}.cpt-quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cpt-quick button{background:#fff;border:1px solid #e9e8e5;border-radius:17px;padding:18px;text-align:left;min-height:105px;cursor:pointer}.cpt-quick button strong{font-size:14px;display:block;margin-bottom:7px}.cpt-quick button span{font-size:11px;color:#7b7d83;line-height:1.5;display:block}.cpt-quick .cpt-accent{background:#f1e8dc;border-color:#e9d8c0}.cpt-courses{display:grid;gap:9px}.cpt-course{background:#fff;border:1px solid #e9e8e5;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:13px;text-align:left;width:100%;cursor:pointer}.cpt-course .cpt-number{display:grid;place-items:center;width:36px;height:36px;flex:0 0 36px;border-radius:10px;background:#f1f0ed;color:#343538;font-weight:750}.cpt-course strong{font-size:13px;line-height:1.45;flex:1}.cpt-course small{color:#9a9a9d;font-size:10px}.cpt-footnote{font-size:11px;color:#898a8e;line-height:1.8;margin-top:20px}.cpt-bilingual{display:block;color:#8b806f;font-size:11px;font-weight:500;margin-top:5px}.cpt-insight{background:#f7f3ed;border:1px solid #e9dece;border-radius:14px;padding:15px;margin-bottom:13px;color:#5c5041;font-size:12px;line-height:1.8}.cpt-insight strong{display:block;color:#2c2926;font-size:13px;margin-bottom:4px}.cpt-diagram{background:#fff;border:1px solid #e7e5e1;border-radius:16px;padding:12px;margin:14px 0}.cpt-diagram svg{display:block;width:100%;height:auto}.cpt-diagram figcaption{font-size:11px;line-height:1.7;color:#77797d;padding:9px 5px 0}.cpt-skip{position:fixed;z-index:100;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:#191b20;color:white;border-radius:50px;padding:9px 12px;box-shadow:0 6px 24px #0003;display:flex;align-items:center;gap:12px;font-size:12px}.cpt-skip[hidden]{display:none}.cpt-skip button{border:0;border-radius:30px;background:#dfc49c;padding:8px 12px;font-weight:700}
+@media(max-width:860px){.app{grid-template-columns:minmax(0,1fr)}.main{padding:18px 17px 110px}.cpt-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:25;background:rgba(250,249,247,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid #e8e6e2;padding:9px 8px calc(8px + env(safe-area-inset-bottom));justify-content:space-around}.cpt-bottom button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:65px;color:#929296;font-size:10px;font-weight:650;padding:4px 8px;cursor:pointer}.cpt-bottom button span{font-size:22px;line-height:1.2;font-weight:450}.cpt-bottom button.active{color:#191b20}.tts-fab{bottom:calc(86px + env(safe-area-inset-bottom));right:16px;width:53px;height:53px;background:#1a1c20;box-shadow:0 7px 20px #10111432}.tts-bar{bottom:calc(64px + env(safe-area-inset-bottom));padding-bottom:15px}.tts-bar:not(.on){visibility:hidden;pointer-events:none}.cpt-hero h1{font-size:28px}.v2-tools{display:flex;overflow-x:auto;flex-wrap:nowrap;gap:8px;padding-bottom:7px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.v2-tools::-webkit-scrollbar{display:none}.v2-tools input{flex:0 0 170px;min-width:170px}.v2-tools button{flex:0 0 auto!important;min-width:76px!important;padding:10px 13px!important;font-size:12px!important}.topbar{display:flex;flex-direction:column;gap:12px}.topbar>div:first-child{width:100%;align-items:flex-start!important}.ch-head h2{font-size:21px}.tabs{width:100%;display:grid;grid-template-columns:1fr 1fr}.tabs button{padding:10px 14px}.obj-head .otx{font-size:14.5px}.cpt-apphead{margin-bottom:18px}.cpt-headtext small{font-size:10px}.v2-panel{padding:17px}.v21-flow{gap:4px}.v21-flow span{font-size:12px}.v21-flow small{font-size:8px;word-break:break-word}.cpt-quick button{padding:15px}.cpt-home{padding-bottom:40px}}
+@media(max-width:390px){.cpt-headtext strong{font-size:12px}.cpt-headtext small{font-size:9px}.cpt-version{font-size:10px}.cpt-hero h1{font-size:25px}.cpt-stat{padding:13px 9px}.cpt-stat strong{font-size:22px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
 </head>
 <body>
 <div class="app">
+<div class="cpt-skip" id="cptUpdateBanner" hidden><span>已发现新版内容</span><button type="button" id="cptReload">更新应用</button></div>
   <aside class="side" id="side">
     <div class="brand">
       <div class="logo">NASM</div>
@@ -234,11 +250,15 @@ body{line-height:1.65}
       <div class="pbar"><i id="progBar"></i></div>
       <div class="ptxt"><span>已掌握目标</span><span id="progTxt">0 / 0</span></div>
     </div>
+    <button class="cpt-side-home" id="cptSideHome" type="button">⌂ &nbsp; 学习首页</button>
     <div id="nav"></div>
   </aside>
   <div class="scrim" id="scrim"></div>
 
   <main class="main">
+    <div class="cpt-apphead"><div class="cpt-headlogo">C<span>·</span></div><div class="cpt-headtext"><strong>CPT STUDY</strong><small>NASM-CPT 第6版 · 独立学习辅助</small></div><span class="cpt-version">V3.0</span></div>
+    <section id="cptHome" class="cpt-home" hidden></section>
+    <div id="cptStudyArea">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:12px">
         <button class="menu-btn" id="menuBtn" aria-label="目录">
@@ -273,8 +293,10 @@ body{line-height:1.65}
         </div>
       </div>
     </div>
+    </div>
   </main>
 </div>
+<nav class="cpt-bottom" aria-label="主导航"><button type="button" id="cptNavHome" class="active"><span>⌂</span>首页</button><button type="button" id="cptNavCourse"><span>▤</span>课程</button><button type="button" id="cptNavFlash"><span>◫</span>闪卡</button><button type="button" id="cptNavTools"><span>◇</span>工具</button></nav>
 
 <button class="tts-fab" id="ttsFab" aria-label="朗读本页">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9.5v5h3.5L12 20V4L6.5 9.5z"/><path d="M15 8.5a5 5 0 010 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -288,8 +310,8 @@ body{line-height:1.65}
   <div class="tts-controls">
     <div class="tts-segs">
       <div class="tts-seg" id="ttsSex">
-        <button data-sex="female" class="on">台湾女声</button>
-        <button data-sex="male">台湾男声</button>
+        <button data-sex="female" class="on">中文女声</button>
+        <button data-sex="male">中文男声</button>
       </div>
       <div class="tts-seg" id="ttsRate">
         <button data-rate="0.9">慢</button>
@@ -795,7 +817,8 @@ const EQA=[
 ];
 
 /* ============ 状态与持久化 ============ */
-let cur=4, view='ch', appCur='A', mode='learn', fIdx=0, fReveal=false;
+let cptRoute='home', cptReady=false;
+let cur=(()=>{try{const n=Number(localStorage.getItem('cpt_last_chapter'));return Number.isInteger(n)&&n>=1&&n<=20?n:1}catch(e){return 1}})(), view='ch', appCur='A', mode='learn', fIdx=0, fReveal=false;
 let mastered=new Set(JSON.parse(localStorage.getItem('nasm_mastered')||'[]'));
 const saveMaster=()=>localStorage.setItem('nasm_mastered',JSON.stringify([...mastered]));
 const key=(c,i)=>'c'+c+'_o'+i;
@@ -823,8 +846,8 @@ function renderNav(){
   document.querySelectorAll('.chap[data-ch]').forEach(b=>b.onclick=()=>{curCh(+b.dataset.ch);closeSide();});
   document.querySelectorAll('.chap[data-app]').forEach(b=>b.onclick=()=>{selectApp(b.dataset.app);closeSide();});
 }
-function curCh(c){cur=c;view='ch';fIdx=0;fReveal=false;renderNav();renderMain();ttsOnNav();}
-function selectApp(no){view='app';appCur=no;renderNav();renderMain();ttsOnNav();}
+function curCh(c){cur=c;view='ch';fIdx=0;fReveal=false;try{localStorage.setItem('cpt_last_chapter',String(c));localStorage.setItem('cpt_last_route',JSON.stringify({view:'ch',cur:c}))}catch(e){}renderNav();renderMain();ttsOnNav();if(typeof cptSyncNav==='function')cptSyncNav();window.scrollTo({top:0,behavior:'instant'});}
+function selectApp(no){view='app';appCur=no;try{localStorage.setItem('cpt_last_route',JSON.stringify({view:'app',appCur:no}))}catch(e){}renderNav();renderMain();ttsOnNav();if(typeof cptSyncNav==='function')cptSyncNav();window.scrollTo({top:0,behavior:'instant'});}
 
 /* ============ 语音朗读 TTS ============ */
 const ttsSynth=('speechSynthesis' in window)?window.speechSynthesis:null;
@@ -1129,7 +1152,7 @@ function renderFlash(){
   const ob=obs[fIdx];fReveal=false;
   document.getElementById('flashCount').textContent='第 '+(fIdx+1)+' / '+n+' 张';
   document.getElementById('flashQ').textContent=ob.o;
-  document.getElementById('flashA').innerHTML='<ul>'+ob.pts.map(p=>'<li>'+p+'</li>').join('');
+  document.getElementById('flashA').innerHTML='<ul>'+ob.pts.map(p=>'<li>'+p+'</li>').join('')+'</ul>';
   document.getElementById('flashState').textContent=mastered.has(key(cur,fIdx))?'本张已掌握':'先在脑中作答，再揭晓';
   document.getElementById('prevCard').disabled=fIdx===0;
   document.getElementById('nextCard').disabled=fIdx===n-1;
@@ -1147,7 +1170,7 @@ function switchMode(m){
   document.getElementById('tabFlash').classList.toggle('on',m==='flash');
   document.getElementById('learnView').style.display=m==='learn'?'block':'none';
   document.getElementById('flashView').classList.toggle('on',m==='flash'&&!isLocked(cur));
-  if(m==='flash')renderFlash();
+  if(m==='flash')renderFlash();if(typeof cptSyncNav==='function')cptSyncNav();
 }
 
 /* ============ 总进度 ============ */
@@ -1176,7 +1199,7 @@ renderNav();renderMain();switchMode('learn');
 /* ===== V2 study tools: all local, no external scripts ===== */
 const v2Panel=document.getElementById('v2Panel');
 const v2Esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function v2Show(html){v2Panel.innerHTML=html;v2Panel.classList.remove('v2-hidden');v2Panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function v2Show(html){v2Panel.innerHTML='<button class="cpt-panel-close" type="button" onclick="v2Hide()" aria-label="关闭工具面板">✕</button>'+html;v2Panel.classList.remove('v2-hidden');requestAnimationFrame(()=>v2Panel.scrollIntoView({behavior:'smooth',block:'start'}));}
 function v2Hide(){v2Panel.classList.add('v2-hidden');v2Panel.innerHTML='';}
 document.getElementById('v2Search').addEventListener('input',function(){
  const q=this.value.trim().toLocaleLowerCase();if(!q){v2Hide();return;}
@@ -1190,8 +1213,8 @@ let v2QuizIndex=0,v2QuizReveal=false;
 function v2Quiz(){const d=DATA[cur];if(!d)return;v2QuizIndex=Math.min(v2QuizIndex,d.objectives.length-1);const ob=d.objectives[v2QuizIndex];v2Show('<h3>第'+cur+'章 · 主动回忆自测</h3><p class="v2-tag">'+(v2QuizIndex+1)+' / '+d.objectives.length+' · 自测题来自原版章目标，不是官方考试题。</p><p style="margin:14px 0;font-weight:700">'+v2Esc(ob.o)+'</p>'+(v2QuizReveal?'<ul style="padding-left:20px;line-height:1.8">'+ob.pts.map(p=>'<li>'+v2Esc(p)+'</li>').join('')+'</ul>':'<p class="v2-tag">先自己回答，再揭晓参考要点。</p>')+'<div class="v2-tools" style="margin-top:14px"><button id="v2Answer">'+(v2QuizReveal?'隐藏答案':'揭晓答案')+'</button><button id="v2Next">下一题</button></div>');document.getElementById('v2Answer').onclick=()=>{v2QuizReveal=!v2QuizReveal;v2Quiz()};document.getElementById('v2Next').onclick=()=>{v2QuizIndex=(v2QuizIndex+1)%d.objectives.length;v2QuizReveal=false;v2Quiz()};}
 document.getElementById('v2QuizBtn').onclick=()=>{v2QuizIndex=0;v2QuizReveal=false;v2Quiz()};
 const v2Figures=[
- {title:'三大运动平面 · 示意图',desc:'矢状面：屈伸；额状面：外展内收；水平面：旋转。示意图用于概念学习，并非解剖比例图。',svg:`<svg class="v2-figure" viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三大运动平面"><rect width="620" height="220" fill="#f7f9fc"/><g font-family="sans-serif" text-anchor="middle" fill="#24304a"><g transform="translate(105 12)"><ellipse cx="0" cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><path d="M0 6L0 195" stroke="#ed8a17" stroke-width="4" stroke-dasharray="7 5"/><text y="207" font-size="14">矢状面</text></g><g transform="translate(310 12)"><ellipse cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><rect x="-54" y="12" width="108" height="180" fill="#42a68a" opacity=".22" stroke="#25886f" stroke-width="2"/><text y="207" font-size="14">额状面</text></g><g transform="translate(515 12)"><ellipse cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><path d="M-66 88H66L44 110H-44Z" fill="#ed8a17" opacity=".45" stroke="#bb6914"/><text y="207" font-size="14">水平面</text></g></g></svg>`},
- {title:'OPT 模型 · 五阶段',desc:'稳定耐力 → 力量耐力 → 肌肥大 → 最大力量 → 爆发力。实际训练阶段选择应基于评估与目标。',svg:`<svg class="v2-figure" viewBox="0 0 620 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OPT五阶段示意"><rect width="620" height="270" fill="#f7f9fc"/><g font-family="sans-serif" text-anchor="middle" font-size="16" font-weight="bold"><rect x="30" y="207" width="560" height="48" rx="8" fill="#d9e7f7"/><text x="310" y="237" fill="#25314d">阶段1 · 稳定耐力</text><rect x="70" y="156" width="480" height="46" rx="8" fill="#b8d9e6"/><text x="310" y="184" fill="#25314d">阶段2 · 力量耐力</text><rect x="110" y="105" width="400" height="46" rx="8" fill="#9bd0bb"/><text x="310" y="134" fill="#25314d">阶段3 · 肌肥大</text><rect x="150" y="54" width="320" height="46" rx="8" fill="#f5c987"/><text x="310" y="83" fill="#55320b">阶段4 · 最大力量</text><rect x="190" y="4" width="240" height="45" rx="8" fill="#ef8a17"/><text x="310" y="32" fill="white">阶段5 · 爆发力</text></g></svg>`},
+ {title:'三大运动平面 · 示意图',desc:'矢状面 Sagittal plane：屈伸；额状面 Frontal plane：外展内收；水平面 Transverse plane：旋转。示意图用于概念学习，并非解剖比例图。',svg:`<svg class="v2-figure" viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三大运动平面"><rect width="620" height="220" fill="#f7f9fc"/><g font-family="sans-serif" text-anchor="middle" fill="#24304a"><g transform="translate(105 12)"><ellipse cx="0" cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><path d="M0 6L0 195" stroke="#ed8a17" stroke-width="4" stroke-dasharray="7 5"/><text y="207" font-size="14">矢状面</text></g><g transform="translate(310 12)"><ellipse cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><rect x="-54" y="12" width="108" height="180" fill="#42a68a" opacity=".22" stroke="#25886f" stroke-width="2"/><text y="207" font-size="14">额状面</text></g><g transform="translate(515 12)"><ellipse cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><path d="M-66 88H66L44 110H-44Z" fill="#ed8a17" opacity=".45" stroke="#bb6914"/><text y="207" font-size="14">水平面</text></g></g></svg>`},
+ {title:'OPT 模型 · 五阶段',desc:'稳定耐力 → 力量耐力 → 肌肥大 → 最大力量 → 爆发力。实际训练阶段选择应基于评估与目标。',svg:`<svg class="v2-figure" viewBox="0 0 620 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OPT五阶段示意"><rect width="620" height="270" fill="#f7f9fc"/><g font-family="sans-serif" text-anchor="middle" font-size="16" font-weight="bold"><rect x="30" y="207" width="560" height="48" rx="8" fill="#d9e7f7"/><text x="310" y="237" fill="#25314d">阶段1 · 稳定耐力</text><rect x="70" y="156" width="480" height="46" rx="8" fill="#b8d9e6"/><text x="310" y="184" fill="#25314d">阶段2 · 力量耐力</text><rect x="110" y="105" width="400" height="46" rx="8" fill="#9bd0bb"/><text x="310" y="134" fill="#25314d">阶段3 · 肌肉发展</text><rect x="150" y="54" width="320" height="46" rx="8" fill="#f5c987"/><text x="310" y="83" fill="#55320b">阶段4 · 最大力量</text><rect x="190" y="4" width="240" height="45" rx="8" fill="#ef8a17"/><text x="310" y="32" fill="white">阶段5 · 爆发力</text></g></svg>`},
  {title:'能量系统 · 强度与持续时间',desc:'三种供能系统始终协同工作；不同强度和时间下主导贡献不同。下图是概念示意，不代表精确比例。',svg:`<svg class="v2-figure" viewBox="0 0 620 235" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="能量系统概念示意"><rect width="620" height="235" fill="#f7f9fc"/><g font-family="sans-serif" font-size="16"><rect x="30" y="25" width="175" height="120" rx="12" fill="#f9d6a5"/><rect x="222" y="25" width="175" height="120" rx="12" fill="#c7d9f2"/><rect x="414" y="25" width="175" height="120" rx="12" fill="#c4e8d7"/><g text-anchor="middle" font-weight="bold" fill="#24304a"><text x="117" y="75">ATP-PC</text><text x="309" y="75">糖酵解</text><text x="501" y="75">氧化系统</text><text x="117" y="107" font-size="13">短时高强度</text><text x="309" y="107" font-size="13">较短时高强度</text><text x="501" y="107" font-size="13">长时持续运动</text></g><path d="M35 170H585" stroke="#4e6081" stroke-width="3"/><path d="M580 164L590 170L580 176" stroke="#4e6081" stroke-width="3" fill="none"/><text x="35" y="195" fill="#56647c" font-size="13">持续时间较短</text><text x="477" y="195" fill="#56647c" font-size="13">持续时间较长</text><text x="310" y="220" text-anchor="middle" fill="#68748b" font-size="12">示意：不是互相独立的开关</text></g></svg>`}
 ];
 document.getElementById('v2VisualBtn').onclick=()=>v2Show('<h3>原创教学图解 · 首批3张</h3>'+v2Figures.map(f=>'<section style="margin:16px 0"><h4 style="margin-bottom:8px">'+f.title+'</h4>'+f.svg+'<p class="v2-tag" style="line-height:1.7">'+f.desc+'</p></section>').join(''));
@@ -1220,6 +1243,52 @@ document.getElementById('v21OptBtn').onclick=v21Opt;
 document.getElementById('v21GlossBtn').onclick=v21Glossary;
 // TTS 只在朗读时转换范围符号；避免改动显示文字。
 function v21Speakable(input){return String(input).replace(/(\d+)\s*[–—~～-]\s*(\d+)\s*(组|次|秒|分钟|小时|%|％)/g,(_,a,b,u)=>`${a}到${b}${u}`).replace(/(\d+)\s*[–—~～-]\s*(\d+)/g,(_,a,b)=>`${a}到${b}`).replace(/\bSMR\b/g,'自我肌筋膜放松').replace(/\bSAQ\b/g,'速度、敏捷性与快速反应').replace(/\bOPT\b/g,'最佳运动表现训练');}
+
+
+/* ===== V3: home, navigation, progress restoration, bilingual deep dives ===== */
+const CPT_BUILD='3.0.0';
+const cptHome=document.getElementById('cptHome');
+const cptStudy=document.getElementById('cptStudyArea');
+function cptSaveRoute(){try{localStorage.setItem('cpt_last_route',JSON.stringify({view:view,cur:cur,appCur:appCur,mode:mode,route:cptRoute}))}catch(e){}}
+function cptSyncNav(){if(!cptReady)return;const ids=['cptNavHome','cptNavCourse','cptNavFlash','cptNavTools'];const target=cptRoute==='home'?ids[0]:view==='app'?ids[3]:mode==='flash'?ids[2]:ids[1];ids.forEach(id=>document.getElementById(id).classList.toggle('active',id===target));cptSaveRoute();}
+function cptProgress(){let total=0,done=0;Object.keys(DATA).forEach(c=>DATA[c].objectives.forEach((_,i)=>{total++;if(mastered.has(key(c,i)))done++}));return {total,done};}
+function cptShowHome(){cptRoute='home';cptHome.hidden=false;cptStudy.hidden=true;v2Hide();closeSide();ttsStop();document.getElementById('ttsBar').classList.remove('on');document.body.classList.remove('tts-on');const {total,done}=cptProgress();const pct=total?Math.round(done/total*100):0;const featured=[1,2,5,6,13,14];cptHome.innerHTML=`<div class="cpt-hero"><div class="cpt-eyebrow">YOUR PRIVATE STUDY SPACE · 专属学习空间</div><h1>学得深入，<br>用得专业。</h1><p>NASM-CPT 第6版 · 系统学习、主动回忆与私教实践辅助。每次从上次学习的位置继续。</p><button type="button" id="cptContinue">继续学习 · 第${cur}章 ↗</button><small>上次学习：${v2Esc(CH[cur])}</small></div><div class="cpt-sectiontitle"><h2>学习概览</h2><span>仅保存在本设备</span></div><div class="cpt-stats"><div class="cpt-stat"><strong>${done}</strong><small>已掌握目标</small></div><div class="cpt-stat"><strong>${total}</strong><small>学习目标总数</small></div><div class="cpt-stat"><strong>${pct}%</strong><small>当前完成度</small></div></div><div class="cpt-sectiontitle"><h2>快捷学习</h2><span>按需进入</span></div><div class="cpt-quick"><button type="button" class="cpt-accent" id="cptQuickOpt"><strong>◇ OPT 模型精讲</strong><span>五阶段逻辑 · 中英对照</span></button><button type="button" id="cptQuickAssessment"><strong>▤ 动作评估</strong><span>第6章 · 观察与分析框架</span></button><button type="button" id="cptQuickGloss"><strong>◈ 专业术语</strong><span>英文 + 中文解释</span></button><button type="button" id="cptQuickFlash"><strong>◫ 主动回忆</strong><span>从上次章节开始复习</span></button></div><div class="cpt-sectiontitle"><h2>核心章节</h2><span>点击进入</span></div><div class="cpt-courses">${featured.map(c=>`<button type="button" class="cpt-course" data-cpt-ch="${c}"><span class="cpt-number">${String(c).padStart(2,'0')}</span><strong>${v2Esc(CH[c])}</strong><small>查看 →</small></button>`).join('')}</div><p class="cpt-footnote">独立编写的学习辅助资料，非 NASM 官方产品；当前内容仍需与第6版教材逐项核对。训练处方与健康筛查须结合具体客户情况。</p>`;
+ document.getElementById('cptContinue').onclick=()=>cptOpenCourse(cur);
+ document.getElementById('cptQuickOpt').onclick=()=>{cptOpenCourse(14);v21Opt()};
+ document.getElementById('cptQuickAssessment').onclick=()=>{cptOpenCourse(6);cptAssessment()};
+ document.getElementById('cptQuickGloss').onclick=()=>{cptOpenCourse(cur);v21Glossary()};
+ document.getElementById('cptQuickFlash').onclick=()=>{cptOpenCourse(cur);switchMode('flash');cptSyncNav()};
+ cptHome.querySelectorAll('[data-cpt-ch]').forEach(b=>b.onclick=()=>cptOpenCourse(Number(b.dataset.cptCh)));
+ cptSyncNav();window.scrollTo({top:0,behavior:'instant'});
+}
+function cptOpenCourse(ch){cptRoute='course';cptHome.hidden=true;cptStudy.hidden=false;v2Hide();curCh(ch);cptSyncNav();}
+function cptOpenTools(){cptRoute='course';cptHome.hidden=true;cptStudy.hidden=false;selectApp('A');cptSyncNav();}
+document.getElementById('cptSideHome').onclick=cptShowHome;
+document.getElementById('cptNavHome').onclick=cptShowHome;
+document.getElementById('cptNavCourse').onclick=()=>cptOpenCourse(cur);
+document.getElementById('cptNavFlash').onclick=()=>{cptOpenCourse(cur);switchMode('flash');cptSyncNav()};
+document.getElementById('cptNavTools').onclick=cptOpenTools;
+const cptOldNav=renderNav;
+renderNav=function(){cptOldNav();document.querySelectorAll('.chap[data-ch]').forEach(b=>b.addEventListener('click',()=>{cptRoute='course';cptHome.hidden=true;cptStudy.hidden=false;cptSyncNav();window.scrollTo({top:0,behavior:'instant'})}));document.querySelectorAll('.chap[data-app]').forEach(b=>b.addEventListener('click',()=>{cptRoute='course';cptHome.hidden=true;cptStudy.hidden=false;cptSyncNav();window.scrollTo({top:0,behavior:'instant'})}));};
+// Existing chapter text is retained; this learning companion provides extra context rather than overwriting the original.
+function cptAssessment(){
+ const svg=`<svg viewBox="0 0 360 218" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="过头深蹲观察框架：正面、侧面、背面"><rect width="360" height="218" rx="13" fill="#faf9f6"/><g stroke="#363a41" stroke-width="7" stroke-linecap="round" fill="none"><g transform="translate(61 28)"><circle cx="0" cy="18" r="13" stroke-width="3"/><path d="M0 34V91M0 45L-25 16M0 45L25 16M0 91L-19 146M0 91L19 146"/></g><g transform="translate(180 28)"><circle cx="0" cy="18" r="13" stroke-width="3"/><path d="M0 34L14 91M0 45L-12 10M0 45L25 11M14 91L-1 146M14 91L34 146"/></g><g transform="translate(300 28)"><circle cx="0" cy="18" r="13" stroke-width="3"/><path d="M0 34V91M0 45L-25 16M0 45L25 16M0 91L-19 146M0 91L19 146"/></g></g><g font-size="12" font-weight="700" fill="#6b5640" text-anchor="middle"><text x="61" y="200">正面 Front</text><text x="180" y="200">侧面 Side</text><text x="300" y="200">背面 Back</text></g><g stroke="#c18d55" stroke-width="2" stroke-dasharray="4 3"><path d="M61 60V174M180 60V174M300 60V174"/></g></svg>`;
+ v2Show(`<div class="v21-top"><span class="v21-kicker">第6章 · ASSESSMENT / 体能评估</span><h3>从观察到训练决策</h3><p>评估的目的不是凭一个动作给客户下诊断，而是识别可重复观察的动作特征，结合健康史和其他评估制定下一步计划。</p></div><div class="cpt-insight"><strong>专业边界</strong>动作代偿不等于某块肌肉必然“过紧”或“无力”；肌肉关联表可作为检查假设，不能代替完整评估或医学诊断。</div><figure class="cpt-diagram">${svg}<figcaption>Overhead Squat Assessment（过头深蹲评估）：示意三个常见观察视角。此图为概念线稿，不代表正确或错误动作的医学判定。</figcaption></figure><article class="v21-stage"><div class="v21-stage-head"><span class="v21-badge">01</span><div><strong>先进行健康筛查</strong><small>Health Screening · 健康筛查</small></div></div><p>收集健康史、症状、活动情况与训练目标；存在胸痛、晕厥等警示信号时，停止测试并按需要转介医疗专业人员。</p></article><article class="v21-stage"><div class="v21-stage-head"><span class="v21-badge">02</span><div><strong>再观察动作表现</strong><small>Movement Observation · 动作观察</small></div></div><p>在正面、侧面、背面观察足踝、膝、骨盆、躯干与肩部的运动表现；重复观察，记录条件与结果。</p></article><article class="v21-stage"><div class="v21-stage-head"><span class="v21-badge">03</span><div><strong>建立假设，再验证</strong><small>Hypothesis & Reassessment · 假设与复评</small></div></div><p>结合活动范围、动作控制、疼痛情况与训练史选择进一步检查。不要把单一动作表现直接等同于某一肌肉功能障碍。</p></article><article class="v21-stage"><div class="v21-stage-head"><span class="v21-badge">04</span><div><strong>应用到训练计划</strong><small>Programming · 训练计划设计</small></div></div><p>明确可测量目标，先调整动作复杂度与负荷，观察训练后的变化。必要时请医疗或康复专业人员评估。</p></article><div class="cpt-insight"><strong>学习提示</strong>将“看到什么（事实）→ 可能原因（假设）→ 如何验证（方法）→ 如何调整（行动）”分开记录，避免背诵代偿表时把关联误认为因果。</div>`);
+}
+// Add a permanent shortcut to assessment alongside existing tools.
+const cptAssessmentButton=document.createElement('button');cptAssessmentButton.id='cptAssessmentBtn';cptAssessmentButton.textContent='评估精讲';cptAssessmentButton.type='button';cptAssessmentButton.onclick=()=>{if(cptRoute==='home')cptOpenCourse(6);cptAssessment()};document.getElementById('v21OptBtn').after(cptAssessmentButton);
+// Restore last visited chapter, appendix and mode on reload. First-ever visit uses the home dashboard.
+let cptStored=null;try{cptStored=JSON.parse(localStorage.getItem('cpt_last_route')||'null')}catch(e){}
+if(cptStored&&cptStored.view==='app'&&APPENDIX.some(a=>a.no===cptStored.appCur)){view='app';appCur=cptStored.appCur;renderNav();renderMain()}
+if(cptStored&&cptStored.mode==='flash'&&view==='ch'){switchMode('flash')}
+cptReady=true;
+if(cptStored&&cptStored.route==='course'){cptRoute='course';cptHome.hidden=true;cptStudy.hidden=false;cptSyncNav();setTimeout(()=>{const k='cpt_scroll_'+(view==='app'?'a'+appCur:'c'+cur);const y=Number(localStorage.getItem(k)||0);if(y>0)window.scrollTo({top:y,behavior:'instant'})},180)}else cptShowHome();
+// Save scroll position for the active route, without jumping on every chapter render.
+let cptScrollTimer=0;window.addEventListener('scroll',()=>{clearTimeout(cptScrollTimer);cptScrollTimer=setTimeout(()=>{if(cptRoute!=='home')try{localStorage.setItem('cpt_scroll_'+(view==='app'?'a'+appCur:'c'+cur),String(Math.round(window.scrollY)))}catch(e){}},180)},{passive:true});
+window.addEventListener('pagehide',cptSaveRoute);
+// Update notice: registration stays scoped to the GitHub Pages project directory.
+if('serviceWorker' in navigator){navigator.serviceWorker.addEventListener('controllerchange',()=>{document.getElementById('cptUpdateBanner').hidden=false});navigator.serviceWorker.ready.then(reg=>{reg.update().catch(()=>{})}).catch(()=>{})}
+document.getElementById('cptReload').onclick=()=>location.reload();
 
 </script>
 <script>if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}</script>

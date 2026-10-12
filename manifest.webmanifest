@@ -1,11 +1,11 @@
 {
-  "name": "NASM-CPT 第6版 · 学习中心",
-  "short_name": "CPT学习",
+  "name": "CPT STUDY · NASM-CPT 第6版学习中心",
+  "short_name": "CPT STUDY",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0b0d12",
-  "theme_color": "#0b0d12",
+  "background_color": "#17191d",
+  "theme_color": "#17191d",
   "icons": [
     {
       "src": "icon-192.png",
