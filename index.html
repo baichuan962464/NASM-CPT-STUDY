@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NASM-CPT 学习中心 V2 · 预览版</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#16203a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ef8a17'/%3E%3Ctext x='32' y='45' font-size='36' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#0f1626; --ink2:#16203a; --line:#25314d;
+  --paper:#f4f5f8; --card:#ffffff; --bd:#e3e6ee; --tx:#232a3a; --mut:#6b7385;
+  --org:#ef8a17; --org2:#f6a93d; --orgsoft:#fdf0dd;
+  --green:#2f9e6e; --greensoft:#e4f5ec;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;background:var(--paper);color:var(--tx);-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+
+/* ===== Sidebar ===== */
+.side{background:linear-gradient(180deg,var(--ink),var(--ink2));color:#dfe5f2;padding:20px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.brand .logo{width:38px;height:38px;flex:0 0 38px;border-radius:9px;background:var(--org);display:grid;place-items:center;font-weight:800;color:#fff;font-size:15px;letter-spacing:.5px}
+.brand h1{font-size:15px;line-height:1.3;color:#fff}
+.brand small{display:block;font-size:11px;color:#94a0bd;font-weight:500;letter-spacing:.3px}
+.progress-wrap{margin:14px 4px 18px}
+.progress-wrap .pbar{height:7px;border-radius:6px;background:#223052;overflow:hidden}
+.progress-wrap .pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--org),var(--org2));border-radius:6px;transition:width .4s}
+.progress-wrap .ptxt{font-size:11px;color:#9fabca;margin-top:6px;display:flex;justify-content:space-between}
+.part{margin:14px 0 4px}
+.part .pt-title{font-size:11px;letter-spacing:1px;color:#7e8bb0;text-transform:uppercase;padding:0 8px 6px;font-weight:700}
+.chap{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:none;border:0;color:#c6cee0;padding:8px 9px;border-radius:8px;font-size:13px;cursor:pointer;line-height:1.3;transition:.15s}
+.chap:hover{background:#1b2743;color:#fff}
+.chap.active{background:var(--org);color:#fff;font-weight:600}
+.chap .no{flex:0 0 auto;font-size:10px;font-weight:700;background:#223052;color:#aeb8d6;border-radius:5px;padding:2px 6px}
+.chap.active .no{background:rgba(255,255,255,.25);color:#fff}
+.chap .tt{flex:1}
+.chap .dot{width:8px;height:8px;border-radius:50%;background:#33406a;flex:0 0 8px}
+.chap.done .dot{background:var(--org2)}
+.chap.active .dot{background:#fff}
+.chap.locked{color:#7986a8}
+.apx-title{margin:18px 8px 4px;font-size:11px;letter-spacing:1px;color:#7e8bb0;font-weight:700}
+
+/* ===== Main ===== */
+.main{padding:26px 30px 60px;max-width:980px;width:100%}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.crumb{font-size:12px;color:var(--mut)}
+.crumb b{color:var(--org);font-weight:700}
+.ch-head h2{font-size:24px;letter-spacing:-.3px;margin:6px 0 4px}
+.ch-head .sub{font-size:13px;color:var(--mut)}
+.tabs{display:inline-flex;background:#e9ecf3;border-radius:10px;padding:3px;gap:2px}
+.tabs button{border:0;background:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;color:var(--mut);cursor:pointer}
+.tabs button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+
+.hint-banner{display:flex;gap:10px;align-items:flex-start;background:var(--orgsoft);border:1px solid #f6dcb8;border-radius:10px;padding:12px 14px;font-size:13px;color:#8a5310;margin-bottom:18px;line-height:1.5}
+.hint-banner svg{flex:0 0 18px;margin-top:1px}
+
+/* objective cards (learn mode) */
+.obj-card{background:var(--card);border:1px solid var(--bd);border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+.obj-head{display:flex;gap:12px;align-items:flex-start;padding:15px 16px;cursor:pointer;width:100%;text-align:left;background:none;border:0;color:var(--tx)}
+.obj-head .idx{flex:0 0 26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.obj-head.mastered .idx{background:var(--green)}
+.obj-head .otx{flex:1;font-size:14.5px;font-weight:600;line-height:1.5;padding-top:3px}
+.obj-head .chev{flex:0 0 auto;transition:.25s;color:var(--mut);margin-top:3px}
+.obj-card.open .obj-head .chev{transform:rotate(180deg)}
+.obj-body{display:none;padding:0 16px 16px 54px}
+.obj-card.open .obj-body{display:block}
+.pts{list-style:none;margin-bottom:12px}
+.pts li{position:relative;padding:7px 0 7px 20px;font-size:13.5px;line-height:1.6;color:#36405a;border-top:1px dashed #eef0f5}
+.pts li:before{content:"";position:absolute;left:2px;top:14px;width:7px;height:7px;border-radius:50%;background:var(--org)}
+.kws{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.kw{font-size:11.5px;background:#eef1f8;color:#42506e;border-radius:20px;padding:3px 10px;font-weight:600}
+.analogy{font-size:12.5px;background:#f7f9fc;border-left:3px solid var(--org2);border-radius:0 8px 8px 0;padding:8px 12px;color:#526;font-style:italic;line-height:1.5}
+.obj-foot{display:flex;justify-content:flex-end;margin-top:8px}
+.mbtn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd);background:#fff;border-radius:20px;padding:6px 14px;font-size:12.5px;font-weight:600;color:var(--mut);cursor:pointer}
+.mbtn.on{background:var(--greensoft);border-color:#bfe6d2;color:var(--green)}
+
+/* flash mode */
+.flash{display:none}
+.flash.on{display:block}
+.flash-stage{background:var(--card);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--shadow);min-height:340px;display:flex;flex-direction:column}
+.flash-top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--bd);font-size:12.5px;color:var(--mut)}
+.flash-q{padding:30px 28px 16px;font-size:19px;font-weight:700;line-height:1.6;text-align:center}
+.flash-a{padding:8px 28px 20px;display:none}
+.flash.a .flash-a{display:block}
+.flash.a .flash-q{padding-bottom:8px}
+.flash-a ul{list-style:none;max-width:640px;margin:0 auto}
+.flash-a li{position:relative;padding:9px 0 9px 22px;font-size:14px;line-height:1.6;color:#36405a;border-top:1px dashed #eef0f5}
+.flash-a li:before{content:"";position:absolute;left:4px;top:16px;width:7px;height:7px;border-radius:50%;background:var(--org)}
+.flash-tap{margin:auto 28px 16px;text-align:center;font-size:12.5px;color:var(--mut)}
+.flash-actions{display:flex;gap:10px;justify-content:center;padding:0 20px 22px;flex-wrap:wrap}
+.btn{border:0;border-radius:24px;padding:11px 22px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#eef1f6;color:var(--ink)}
+.btn.primary{background:var(--org);color:#fff}
+.btn.success{background:var(--green);color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.menu-btn{display:none}.scrim{display:none}
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;width:280px;z-index:40;transform:translateX(-100%);transition:.25s}
+  .side.open{transform:translateX(0)}
+  .main{padding:18px 16px 50px}
+  .menu-btn{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:9px;border:1px solid var(--bd);background:#fff;cursor:pointer}
+  .scrim{position:fixed;inset:0;background:rgba(10,15,25,.5);z-index:30}
+  .scrim.on{display:block}
+  .obj-body{padding-left:16px}
+}
+/* ===== 附录工具 ===== */
+.ax-bar{background:#fff;border:1px solid #e4e8f2;border-radius:12px;padding:12px;margin-bottom:14px}
+.ax-label{font-size:11px;font-weight:700;letter-spacing:1px;color:#8a93ad;margin:6px 2px 6px}
+.ax-label:first-child{margin-top:0}
+.ax-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid #d7dcea;background:#f6f7fb;color:#46506b;border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;transition:.15s}
+.chip:hover{border-color:#ef8a17}
+.chip.on{background:#ef8a17;border-color:#ef8a17;color:#fff;font-weight:600}
+.ax-list{display:flex;flex-direction:column;gap:9px}
+.ax-item{background:#fff;border:1px solid #e4e8f2;border-radius:11px;padding:11px 13px;display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.ax-name{font-size:14px;font-weight:600;color:#1a2236}
+.ax-cue{grid-column:1/2;font-size:12.5px;color:#6b748c}
+.ax-stages{grid-row:1/3;grid-column:2/3;display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;max-width:120px}
+.stg{font-size:10.5px;font-weight:700;color:#b06a10;background:#fdeed9;border-radius:5px;min-width:19px;text-align:center;padding:2px 4px}
+.ax-empty{color:#8a93ad;font-size:13px;padding:24px;text-align:center}
+.ax-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+.tab{border:1px solid #d7dcea;background:#fff;color:#46506b;border-radius:9px;padding:7px 11px;font-size:12.5px;cursor:pointer}
+.tab.on{background:#16203a;border-color:#16203a;color:#fff;font-weight:600}
+.b-name{font-size:15px;font-weight:700;color:#1a2236;margin:2px 0 9px}
+.b-table{width:100%;border-collapse:collapse;background:#fff;border-radius:11px;overflow:hidden;border:1px solid #e4e8f2}
+.b-table th,.b-table td{padding:9px 12px;font-size:13px;border-bottom:1px solid #edf0f6;text-align:left;vertical-align:top}
+.b-table th{width:22%;background:#f6f7fb;color:#5a637c;font-weight:700;white-space:nowrap}
+.b-table tr:last-child th,.b-table tr:last-child td{border-bottom:none}
+.calc-card{background:#fff;border:1px solid #e4e8f2;border-radius:12px;padding:16px;margin-bottom:13px}
+.calc-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.calc-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:120px}
+.calc-field label{font-size:11.5px;font-weight:700;color:#8a93ad;letter-spacing:.5px}
+.calc-input{border:1px solid #d3d9e8;border-radius:9px;padding:10px 12px;font-size:15px;color:#1a2236;background:#fafbfe}
+.calc-input:focus{outline:none;border-color:#ef8a17;background:#fff}
+.rm-out{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0 4px}
+.rm-box{border-radius:10px;padding:11px;text-align:center;background:#f6f7fb;border:1px solid #e4e8f2}
+.rm-box.hl{background:#fff3e4;border-color:#f3c188}
+.rm-box .lb{font-size:11px;color:#8a93ad;margin-bottom:3px}
+.rm-box .vl{font-size:20px;font-weight:800;color:#1a2236}
+.rm-box.hl .vl{color:#d97a0c}
+.pct-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e4e8f2;border-radius:11px;overflow:hidden}
+.pct-table th,.pct-table td{padding:7px 10px;font-size:12.5px;text-align:center;border-bottom:1px solid #edf0f6}
+.pct-table th{background:#16203a;color:#fff;font-weight:700}
+.pct-table td:first-child{color:#5a637c;font-weight:700;background:#fafbfe}
+.formula-note{font-size:12px;color:#7b849c;line-height:1.7;margin-top:11px;background:#f6f7fb;border-radius:9px;padding:10px 12px}
+.d-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px}
+.d-card{perspective:1100px;cursor:pointer;height:172px}
+.d-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.d-card.flip .d-inner{transform:rotateY(180deg)}
+.d-front,.d-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:13px;border:1px solid #e4e8f2;display:flex;flex-direction:column}
+.d-front{background:#fff;justify-content:center;align-items:center;gap:8px;text-align:center}
+.d-fname{font-size:15.5px;font-weight:800;color:#1a2236}
+.d-fgrp{font-size:11px;color:#b06a10;background:#fdeed9;border-radius:6px;padding:3px 9px}
+.d-hint{font-size:10.5px;color:#9aa2b8;margin-top:4px}
+.d-back{background:#16203a;color:#e8ebf4;transform:rotateY(180deg);overflow:auto;gap:5px}
+.d-sec{font-size:11.5px;line-height:1.5}
+.d-sec b{color:#f6a93d;display:block;font-size:10px;letter-spacing:.5px;margin-bottom:1px}
+.eq-card{background:#fff;border:1px solid #e4e8f2;border-radius:13px;padding:18px;min-height:200px;display:flex;flex-direction:column}
+.eq-progress{font-size:12px;color:#8a93ad;margin-bottom:12px;font-weight:600}
+.eq-q{font-size:16px;font-weight:700;color:#1a2236;line-height:1.55}
+.eq-a{margin-top:15px;padding:13px;border-radius:10px;background:#f3f8f4;border:1px solid #cfe6d8;color:#235039;font-size:13.5px;line-height:1.65;display:none}
+.eq-a.on{display:block}
+.eq-tap{margin-top:auto;font-size:11.5px;color:#9aa2b8;text-align:center;padding-top:14px}
+.eq-nav{display:flex;gap:9px;margin-top:12px}
+.eq-nav button{flex:1;border:1px solid #d7dcea;background:#fff;border-radius:9px;padding:10px;font-size:13px;font-weight:600;color:#46506b;cursor:pointer}
+.eq-nav button.go{background:#ef8a17;border-color:#ef8a17;color:#fff}
+.eq-nav button:disabled{opacity:.4;cursor:default}
+@media(max-width:560px){.rm-out{grid-template-columns:1fr 1fr}.rm-box.hl{grid-column:1/3}.d-grid{grid-template-columns:1fr 1fr;gap:8px}.d-card{height:180px}}
+/* ===== 语音朗读 TTS ===== */
+.tts-fab{position:fixed;right:18px;bottom:18px;width:62px;height:62px;border-radius:50%;background:var(--org);color:#fff;border:0;font-size:13px;font-weight:700;box-shadow:0 10px 24px rgba(239,138,23,.42);cursor:pointer;z-index:60;display:grid;place-items:center;line-height:1.15}
+.tts-fab:active{background:#dc7d12}
+.tts-bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e3e6ee;box-shadow:0 -10px 32px rgba(16,24,40,.14);z-index:61;transform:translateY(112%);transition:transform .28s ease;padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.tts-bar.on{transform:translateY(0)}
+.tts-btop{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.tts-btitle{font-size:13.5px;font-weight:700;color:#1a2236;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tts-count{font-size:12px;color:#8a93ad;font-weight:700}
+.tts-x{border:0;background:#f1f3f8;color:#6b7385;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:15px;flex:0 0 32px}
+.tts-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tts-segs{display:flex;gap:7px;flex-wrap:wrap}
+.tts-transport{display:flex;gap:10px;width:100%;justify-content:center;margin-top:3px}
+.tts-seg{display:inline-flex;background:#eef1f7;border-radius:9px;padding:2px}
+.tts-seg button{border:0;background:none;padding:8px 11px;border-radius:7px;font-size:12.5px;font-weight:600;color:#6b7385;cursor:pointer}
+.tts-seg button.on{background:#fff;color:#1a2236;box-shadow:0 1px 3px rgba(16,24,40,.12)}
+.tts-cbtn{border:1px solid #dde2ee;background:#fff;color:#1a2236;border-radius:11px;width:48px;height:50px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.tts-cbtn:active{background:#f4f6fb}
+.tts-cbtn svg{width:22px;height:22px}
+.tts-play{width:60px;height:52px;background:var(--org);border-color:var(--org);color:#fff;border-radius:13px}
+.tts-play.playing{background:var(--ink);border-color:var(--ink)}
+.tts-play svg{width:26px;height:26px}
+.tts-stop{color:#b04545}
+.tts-spacer{flex:1}
+.tts-note{font-size:11px;color:#9aa2b8;margin-top:9px;line-height:1.55;display:none}
+.tts-note.on{display:block}
+body.tts-on{padding-bottom:150px}
+@media(max-width:560px){.tts-controls{gap:6px}.tts-cbtn{width:45px;height:48px}.tts-play{width:56px}.tts-seg button{padding:8px 9px;font-size:12px}}
+
+/* V2 mobile additions */
+.v2-tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.v2-tools button,.v2-tools input{border:1px solid var(--bd);background:#fff;border-radius:10px;padding:10px;font-size:13px}.v2-tools input{flex:1;min-width:160px}.v2-panel{background:white;border:1px solid var(--bd);padding:16px;border-radius:14px;margin:0 0 15px}.v2-panel h3{margin-bottom:10px}.v2-result{display:block;width:100%;padding:10px;text-align:left;background:#f6f7fb;border:0;border-radius:8px;margin:6px 0;color:#25314d}.v2-figure{max-width:100%;height:auto;border-radius:12px;background:#f7f9fc}.v2-tag{font-size:12px;color:#6b7385}.v2-hidden{display:none}.v2-status{font-size:12px;color:#57647d;margin-top:8px}button:focus-visible{outline:3px solid #ef8a17;outline-offset:2px}
+@media(max-width:560px){.topbar{align-items:flex-start}.ch-head h2{font-size:20px}.v2-tools{gap:6px}.v2-tools button{flex:1}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand">
+      <div class="logo">NASM</div>
+      <h1>CPT 私人教练认证<small>第6版 · 章目标交互学习</small></h1>
+    </div>
+    <div class="progress-wrap">
+      <div class="pbar"><i id="progBar"></i></div>
+      <div class="ptxt"><span>已掌握目标</span><span id="progTxt">0 / 0</span></div>
+    </div>
+    <div id="nav"></div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="menu-btn" id="menuBtn" aria-label="目录">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#232a3a" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div>
+          <div class="crumb" id="crumb"></div>
+          <div class="ch-head"><h2 id="chTitle"></h2><div class="sub" id="chSub"></div></div>
+        </div>
+      </div>
+      <div class="tabs">
+        <button id="tabLearn" class="on">学习模式</button>
+        <button id="tabFlash">闪卡回忆</button>
+      </div>
+    </div>
+
+    <div class="v2-tools" aria-label="学习工具">
+<input id="v2Search" type="search" placeholder="搜索章节、知识点…" aria-label="搜索知识点"><button id="v2QuizBtn">自测</button><button id="v2VisualBtn">图解</button><button id="v2Export">备份</button><button id="v2Import">恢复</button><input id="v2ImportFile" type="file" accept="application/json,.json" hidden>
+</div><div id="v2Panel" class="v2-panel v2-hidden"></div>
+<div class="learn" id="learnView"></div>
+    <div class="flash" id="flashView">
+      <div class="flash-stage">
+        <div class="flash-top"><span id="flashCount"></span><span id="flashState">先在脑中作答，再揭晓</span></div>
+        <div class="flash-q" id="flashQ"></div>
+        <div class="flash-a" id="flashA"></div>
+        <div class="flash-tap" id="flashTap">点击下方「揭晓答案」核对</div>
+        <div class="flash-actions">
+          <button class="btn ghost" id="prevCard">上一张</button>
+          <button class="btn primary" id="revealBtn">揭晓答案</button>
+          <button class="btn success" id="masterCard">我已掌握</button>
+          <button class="btn ghost" id="nextCard">下一张</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<button class="tts-fab" id="ttsFab" aria-label="朗读本页">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9.5v5h3.5L12 20V4L6.5 9.5z"/><path d="M15 8.5a5 5 0 010 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+</button>
+<div class="tts-bar" id="ttsBar">
+  <div class="tts-btop">
+    <div class="tts-btitle" id="ttsTitle">朗读</div>
+    <div class="tts-count" id="ttsCount"></div>
+    <button class="tts-x" id="ttsX" aria-label="收起">×</button>
+  </div>
+  <div class="tts-controls">
+    <div class="tts-segs">
+      <div class="tts-seg" id="ttsSex">
+        <button data-sex="female" class="on">台湾女声</button>
+        <button data-sex="male">台湾男声</button>
+      </div>
+      <div class="tts-seg" id="ttsRate">
+        <button data-rate="0.9">慢</button>
+        <button data-rate="1" class="on">正常</button>
+        <button data-rate="1.15">稍快</button>
+      </div>
+    </div>
+    <div class="tts-transport">
+      <button class="tts-cbtn" id="ttsPrev" aria-label="上一条"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9.5 12z"/></svg></button>
+      <button class="tts-cbtn tts-play" id="ttsPlay" aria-label="播放"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="tts-cbtn tts-stop" id="ttsStop" aria-label="停止"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></button>
+      <button class="tts-cbtn" id="ttsNext" aria-label="下一条"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l10.5-7z"/></svg></button>
+    </div>
+  </div>
+  <div class="tts-note" id="ttsNote"></div>
+</div>
+
+<script>
+/* ============ 全书结构 ============ */
+const PARTS=[
+ {title:"第1部分 · 人体动作科学的基础", chapters:[1,2,3,4,5]},
+ {title:"第2部分 · 评估、训练概念与计划设计", chapters:[6,7,8,9,10,11,12,13,14,15,16]},
+ {title:"第3部分 · 营养与补剂", chapters:[17,18]},
+ {title:"第4部分 · 客户互动和职业发展", chapters:[19,20]}
+];
+const APPENDIX=[
+ {no:"A",title:"动作练习库"},{no:"B",title:"OPT 训练计划"},{no:"C",title:"最大肌力转换"},
+ {no:"D",title:"肌肉系统"},{no:"E",title:"考试准备材料"}
+];
+const CH={
+ 1:"综合训练的科学理论基础",2:"基础运动科学",3:"心肺系统",4:"运动代谢与生物能学",5:"人体动作科学",
+ 6:"体能评估",7:"柔韧性训练概念",8:"心肺功能训练",9:"核心训练概念",10:"平衡性训练概念",
+ 11:"快速伸缩复合（反应性）训练概念",12:"速度、敏捷性和快速反应训练",13:"抗阻训练概念",
+ 14:"综合训练计划设计与最佳表现（OPT）模型",15:"练习方式简介",16:"慢性疾病和活动或功能受限",
+ 17:"营养",18:"补剂",19:"生活方式改变与行为指导",20:"开展成功的私人训练业务"
+};
+
+/* ============ 已填充章节数据（逐章补） ============ */
+const DATA={
+1:{objectives:[
+ {o:"讲述私人训练行业的历史。",
+  pts:["20世纪50年代：健身房是男性专属，用可自由调配重的器材，为健美、力量举、举重和运动员增肌、增力、增爆发。","逐步从男性专属、追求肌肉力量，走向大众健康、体适能与慢病预防；私教成为俱乐部非会费收入的最大来源。","需求驱动：人口老龄化、肥胖与糖尿病等慢病泛滥；公司、医疗机构、保健机构是增长最快的市场。"],
+  kw:["50年代","男性专属","非会费收入","老龄化"],analogy:"行业从少数人的“铁匠铺”，变成大众的“健康服务站”。"},
+ {o:"识别私人训练客户的常见特点。",
+  pts:["目标多样：减重、增肌、健康改善、体态矫正、运动表现、慢病管理，以及社交与心理需求。","普遍存在久坐、不良姿势、肌肉不平衡、活动不足，动力与依从性差异大。","年龄、体能、健康状况、时间与预算各异，必须个性化而非一刀切。"],
+  kw:["目标多样","久坐","肌肉不平衡","个性化"]},
+ {o:"展现出对综合练习计划设计原则的理解。",
+  pts:["综合计划同时发展多种体适能：心肺、力量、耐力、柔韧、平衡、核心、爆发，并兼顾恢复。","遵循循序渐进、特异性、个体化、超负荷与可逆性原则。","计划结构：热身（柔韧＋心肺）→ 主体（核心/平衡/反应/速度/抗阻）→ 放松。"],
+  kw:["综合体适能","循序渐进","特异性","热身-主体-放松"]},
+ {o:"阐述最佳运动表现训练模型（OPT）。",
+  pts:["OPT 是 NASM 核心模型，分3层级、5阶段：稳定（阶段1稳定耐力）、力量（阶段2力量耐力、阶段3肌肥大、阶段4最大力量）、爆发（阶段5爆发力）。","以评估为基础，按目标与能力逐级进阶，强调多系统整合与动作质量。"],
+  kw:["OPT","稳定/力量/爆发","5阶段","评估"],analogy:"OPT 像盖楼——稳定是地基，力量是主体，爆发是顶层。"}
+]},
+2:{objectives:[
+ {o:"明确人体动作系统的组成部分（动力链）。",
+  pts:["人体动作系统（HMS）＝神经系统、骨骼系统、肌肉系统的功能性整合。","神经、肌肉、关节协同形成“动力链”；任一环节异常都会影响整体动作。"],
+  kw:["HMS","神经/骨骼/肌肉","动力链"],analogy:"神经是电路与指挥，骨骼是杠杆与框架，肌肉是发动机。"},
+ {o:"解释神经系统、骨骼系统、肌肉系统、内分泌系统的基本结构和功能。",
+  pts:["神经系统：中枢（脑、脊髓）＋外周（躯体/自主神经），单位为神经元；借本体感受器（肌梭、高尔基腱器官）完成感觉、整合、运动。","骨骼系统：约206块骨，分中轴与附肢；关节为运动枢纽，分不动、微动、可动（滑液关节），负责支撑、保护、运动、造血与储矿。","肌肉系统：骨骼肌借肌腱附于骨，纤维分Ⅰ型（慢肌、耐力）与Ⅱ型（快肌、力量爆发），含协同肌与拮抗肌。","内分泌系统：腺体分泌激素（胰岛素、生长激素、皮质醇、甲状腺素、儿茶酚胺），调节代谢、生长与应激。"],
+  kw:["中枢/外周神经","滑液关节","Ⅰ/Ⅱ型纤维","激素"],analogy:"肌梭是“长度警报器”，高尔基腱器官是“张力安全阀”。"},
+ {o:"阐述上述系统对锻炼的反应和适应。",
+  pts:["神经：运动单位募集与协调改善、反应变快、本体感觉增强（早期力量增长多来自神经适应）。","骨骼：骨密度与骨强度随负荷增加（Wolff 定律），关节结缔组织增强。","肌肉：肥大、毛细血管与线粒体增多、酶活性提高、耐力与力量增强。","内分泌：激素分泌与敏感性改善（如胰岛素敏感性提高、应激激素更平稳）。"],
+  kw:["神经适应","Wolff定律","肥大","胰岛素敏感性"]}
+]},
+3:{objectives:[
+ {o:"描述心血管系统和呼吸系统的结构和功能。",
+  pts:["心血管系统＝心脏、血管（动脉/毛细血管/静脉）、血液；心脏是泵，血液输送氧和营养、带走废物。","呼吸系统＝气道（鼻咽喉/气管/支气管）、肺泡和肺；在肺泡进行气体交换（O₂入血、CO₂排出）。"],
+  kw:["心脏","血管","肺泡","气体交换"],analogy:"心脏是水泵，肺是换气扇，血管是管道。"},
+ {o:"解释上述系统与人体动作之间的关系。",
+  pts:["运动时肌肉耗氧与产废增加，心肺通过加快心率、呼吸与血流来匹配需求。","心肺能力决定有氧耐力与恢复速度，是持续运动和日常活动（ADL）的基础。"],
+  kw:["心率","血流","有氧耐力","恢复"]},
+ {o:"描述心血管系统和呼吸系统如何同时工作。",
+  pts:["吸气摄入 O₂ → 肺泡入血 → 心脏泵血到全身；组织产生的 CO₂ 入血 → 心脏 → 肺呼出。","运动时心输出量（心率×每搏输出量）与通气量同步增加，维持供氧与酸碱平衡。"],
+  kw:["心输出量","每搏输出量","通气量","氧合"],analogy:"肺进货、心配送、细胞下单，是一套供氧物流。"},
+ {o:"阐述呼吸功能障碍对人体动作系统的影响。",
+  pts:["呼吸效率下降 → 供氧不足、CO₂清除变慢、易疲劳、耐力与恢复下降。","异常呼吸模式（过度胸式呼吸、屏气）会影响核心稳定与姿势，加重颈肩紧张与代偿。"],
+  kw:["供氧不足","易疲劳","呼吸模式","核心稳定"]}
+]},
+4:{objectives:[
+ {o:"阐述人体在运动中供能的主要方式。",
+  pts:["三大供能系统：磷酸原（ATP-PC）、糖酵解、氧化系统；最终产物都是 ATP。","三系统全程同时工作，按运动强度和持续时间轮流占主导，并非开关式切换。"],
+  kw:["ATP","磷酸原","糖酵解","氧化系统"],analogy:"零钱（磷酸原）· ATM快取（糖酵解）· 银行存款（氧化）。"},
+ {o:"辨别有氧代谢和无氧代谢。",
+  pts:["无氧：不需氧、在细胞质、反应快但产ATP少、维持时间短（磷酸原＋糖酵解）。","有氧：需氧、在线粒体、反应慢但产ATP多、可持久（1分子葡萄糖约产30+个ATP，无氧仅2个）。"],
+  kw:["线粒体","细胞质","氧气","ATP产量"]},
+ {o:"区分不同强度和持续时间的运动以何种供能方式为主。",
+  pts:["约0–10秒极高强度 → 磷酸原；约10秒–2分钟高强度 → 糖酵解；2分钟以上中低强度 → 氧化。","强度越高、时间越短偏无氧；强度越低、时间越长偏有氧。","抗阻训练：组内几秒到几十秒靠无氧，组间休息靠有氧清除乳酸、补充磷酸肌酸。"],
+  kw:["强度","持续时间","主导系统"]},
+ {o:"理解碳水化合物、脂肪和蛋白质作为能量来源的相互作用。",
+  pts:["碳水：最高效燃料，也是无氧代谢唯一可用的燃料，以糖原形式储存。","脂肪：仅在有氧时使用，储量大、氧化慢，低中强度及长时间运动后期供能比例升高。","蛋白质：主要用于构建组织与酶，平时供能约2–5%，糖原耗竭时糖异生比例上升。","“脂肪在碳水的火焰中燃烧”：碳水不足则脂肪氧化不完全、产生酮体，并会分解蛋白质供能。"],
+  kw:["糖原","脂肪氧化","糖异生","酮体"],analogy:"脂肪是柴火，碳水是火苗；没有火苗，柴烧不透。"},
+ {o:"描述稳态训练与力竭训练的能量消耗差异。",
+  pts:["稳态训练：强度恒定、有氧主导、可持续时间长、总消耗可观、恢复快。","力竭训练：高强度、无氧主导、不能维持、产生乳酸与EPOC（运动后过量氧耗）、恢复慢。","稳态持续时间长，消耗脂肪的绝对量往往更多，不必神化后燃效应。"],
+  kw:["稳态","力竭","EPOC","脂肪绝对量"]},
+ {o:"辨别稳态训练与间歇训练的能量需求差异。",
+  pts:["稳态：连续恒定强度，纯有氧，主要提升心肺与有氧基础。","间歇：高强度做功段靠无氧、低强度恢复段靠有氧清除乳酸，平均强度更高、EPOC更高。","间歇同时锻炼无氧做功与有氧恢复能力，提升耐乳酸和快速恢复能力。"],
+  kw:["间歇","做功段","恢复段","耐乳酸"]},
+ {o:"阐述能量产生过程中训练引起的适应性变化。",
+  pts:["有氧适应：线粒体数量与酶活性增加、毛细血管与肌红蛋白增多、脂肪氧化能力提高、心肺与VO2max上升。","无氧适应：ATP/PC储量与相关酶增加、糖原储备与缓冲乳酸能力提高、肌肉肥大、力量增长。","总原则：用哪个系统，哪个系统就变强（特异性 / SAID）。"],
+  kw:["线粒体","VO2max","肥大","SAID"]}
+]},
+5:{objectives:[
+ {o:"解释功能多平面生物力学的概念，包括基本的生物力学术语。",
+  pts:["三个运动平面：矢状面（前后，如走路、深蹲、弯举）、额状面（左右，如侧平举、侧弓步）、水平面（旋转，如转体、挥拍）。","基本术语：屈/伸、外展/内收、内旋/外旋、旋前/旋后，开链/闭链，力、力矩、杠杆、关节活动度（ROM）。","功能性动作强调多平面、多关节，贴近日常与运动需求。"],
+  kw:["矢状/额状/水平面","屈伸/外展","开链/闭链","力矩"],analogy:"三个平面像房间的长、宽、高，真实动作都发生在三维里。"},
+ {o:"阐述肌肉活动和外力与人体动作的关联。",
+  pts:["肌肉发力类型：向心（缩短）、离心（拉长控制）、等长（长度不变、稳定）。","外力包括重力、惯性、地面反作用力与外加负荷；肌肉需产生足够力矩对抗或利用外力。","多肌群以力偶与协同方式产生、引导或抵消力，维持方向与平衡。"],
+  kw:["向心/离心/等长","重力","地面反作用力","力偶"],analogy:"向心是拉起，离心是放下时的刹车，等长是顶住不动。"},
+ {o:"解释与运动训练相关的动作学习和动作控制的概念。",
+  pts:["动作学习三阶段：认知阶段（想动作、易错）、关联阶段（反复纠错）、自动阶段（熟练、不需刻意思考）。","动作控制依赖本体感觉与反馈（内在/外在、即时/延迟反馈）。","从稳定、简单、慢速，逐步增加复杂、速度与负荷。"],
+  kw:["认知/关联/自动阶段","本体感觉","反馈","进阶"]}
+]},
+6:{objectives:[
+ {o:"阐释综合体能评估的组成部分及其理论基础。",
+  pts:["评估是 OPT 起点：主观信息（健康史、目标、生活方式）＋客观信息（姿势、动作、体能测试、生理指标）。","目的：识别风险、肌肉不平衡与动作缺陷，建立基线并指导个性化计划。"],
+  kw:["主观/客观信息","风险","基线","OPT起点"]},
+ {o:"使用健康史问卷，并针对体能评估对客户的整体风险进行分级。",
+  pts:["健康史问卷（如 PAR-Q）了解病史、症状、用药、手术与生活习惯。","风险分级：低危可开始；中危需谨慎或进一步评估；高危（已知心血管/代谢/肾病或有症状）应先就医许可。","识别胸痛、晕厥、异常呼吸困难、心悸等红旗征并转介。"],
+  kw:["PAR-Q","风险分级","低/中/高危","红旗征"]},
+ {o:"了解姿势的重要性、与动作观察的关联，以及如何评估姿势。",
+  pts:["静态姿势评估：从踝、膝、骨盆腰椎、肩胸、头颈逐区观察偏移（足旋前、骨盆前倾、圆肩、头前伸）。","动态动作观察（如过头深蹲）暴露灵活性与稳定性缺陷及代偿。","姿势问题提示肌肉不平衡（部分紧张过度活跃、部分薄弱被抑制）。"],
+  kw:["静态姿势","过头深蹲","代偿","肌肉不平衡"]},
+ {o:"进行与健康相关的全面体能评估，并利用信息设计训练计划。",
+  pts:["体能测试涵盖心肺、肌力肌耐（俯卧撑等）、柔韧（坐位体前屈）、身体成分（围度/皮褶/BMI）。","综合主观与客观信息判断优劣，据此设定目标、选择 OPT 阶段与训练变量。"],
+  kw:["心肺/肌力/柔韧","身体成分","目标设定","训练变量"]}
+]},
+7:{objectives:[
+ {o:"解释肌肉不平衡对人体动作系统（动力链）的影响。",
+  pts:["部分肌肉紧张缩短、对抗肌薄弱被抑制，导致姿势偏移与动作改变（交互抑制、协同主导）。","由久坐、重复动作、训练不当或损伤后固定引起，改变关节受力、降低效率、增加损伤风险。","常见姿势变形综合征：上/下交叉综合征、旋前变形综合征。"],
+  kw:["肌肉不平衡","交互抑制","协同主导","交叉综合征"]},
+ {o:"为使用综合柔韧性训练计划提供科学依据。",
+  pts:["柔韧性影响关节活动度、姿势、动作效率与损伤风险；Davis 定律：软组织按受力方向重塑。","利用自体抑制、交互抑制等神经生理机制，兼顾神经与筋膜。"],
+  kw:["ROM","Davis定律","自体抑制","筋膜"]},
+ {o:"能区分不同类型的柔韧性技术。",
+  pts:["矫正性柔韧：静态拉伸＋肌筋膜放松，改善不平衡。","主动柔韧：主动发力活动关节，借交互抑制放松对抗肌。","功能性柔韧：动态、专项、无痛全幅度，用于热身；弹震式拉伸不推荐普通客户。"],
+  kw:["矫正/主动/功能柔韧","静态/动态","泡沫轴","弹震式"]},
+ {o:"示范并指导特定条件下的柔韧性技术。",
+  pts:["肌筋膜放松在紧张点停留约30秒；静态拉伸缓慢牵至紧张感并保持约30秒。","按评估结果针对性选择；急性期、骨折、近期手术部位避免拉伸。"],
+  kw:["压点停留","30秒","针对性","禁忌"]}
+]},
+8:{objectives:[
+ {o:"定义并阐述与心肺功能训练相关的内容。",
+  pts:["心肺功能＝循环与呼吸系统在持续活动中向骨骼肌供氧的能力，是健康相关五大体适能之一。","心肺训练以有节律、持续、动用大肌群的活动提升心肺耐力。"],
+  kw:["供氧能力","心肺耐力","大肌群","有氧"]},
+ {o:"阐述不同的生理系统对心肺功能训练的反应和适应。",
+  pts:["急性反应：心率、每搏输出量、心输出量、通气量、摄氧量增加，血流转向工作肌。","慢性适应：静息心率下降，每搏输出量与 VO2max 提高，毛细血管与线粒体增多，脂肪氧化增强。"],
+  kw:["急性反应","慢性适应","VO2max","脂肪氧化"]},
+ {o:"阐述与心肺功能相关的健康益处。",
+  pts:["降低心血管病、高血压、2型糖尿病、肥胖、部分肿瘤及抑郁焦虑风险，改善血脂血糖。","改善睡眠、精力、认知、骨密度与生活质量，提升日常活动能力。"],
+  kw:["慢病预防","血压血糖","心理健康","生活质量"]},
+ {o:"阐述针对表面健康人群制订安全有效心肺训练计划的最新指引和建议。",
+  pts:["按 FITT-VP（频率/强度/时间/类型/量/进阶），每周至少150分钟中等或75分钟高强度有氧。","强度可用最大心率、储备心率、RPE 或说话测试判断，循序渐进。"],
+  kw:["FITT-VP","150分钟","储备心率/RPE","进阶"]},
+ {o:"运用个性化方法针对不同客户设计和实施心肺功能训练计划。",
+  pts:["依据评估、目标、偏好、时间与设备选择类型（步行、跑步、骑行、游泳、划船、间歇）。","区分稳态与间歇，调整强度与进阶，兼顾依从性与乐趣。"],
+  kw:["个性化","类型选择","稳态/间歇","依从性"]},
+ {o:"指导客户如何安全有效地进行心肺功能练习。",
+  pts:["充分热身放松、保持正确姿势、适时补水、监测身体反应与 RPE。","出现胸痛、眩晕、异常气短或疼痛应停止，强调恢复与循序渐进。"],
+  kw:["热身放松","补水","监测","停止指征"]}
+]},
+9:{objectives:[
+ {o:"理解核心肌群的重要性。",
+  pts:["核心是上下肢力量传递的中枢（力量屋），含深层稳定肌（腹横肌、多裂肌、膈肌、盆底肌）与表层动作肌（腹直肌、竖脊肌、内外斜肌、腰方肌）。","核心提供稳定、对齐与发力基础，影响姿势、效率、下背健康与运动表现。"],
+  kw:["力量屋","深层稳定肌","腹横肌/多裂肌","力量传递"],analogy:"核心像充满气的气缸，内部有压力才撑得住、不变形。"},
+ {o:"了解稳定系统与动作系统间的区别。",
+  pts:["局部（稳定）系统：深层、耐力型，做脊柱节段稳定（腹横肌、多裂肌、膈肌、盆底）。","整体（动作）系统：表层、力量型，产生躯干大范围动作（腹直肌、竖脊肌、内外斜肌、腰方肌）。","先有稳定，再发展动作与力量。"],
+  kw:["局部稳定","整体动作","节段稳定","先稳后动"]},
+ {o:"论述核心训练的重要性。",
+  pts:["核心力量弱是低效动作与下背损伤的内在基础，可导致可预见的损伤模式。","核心训练提高神经肌肉控制、稳定性、肌耐力、力量与核心爆发力，帮助平坦小腹与强壮腰背。"],
+  kw:["下背损伤","神经肌肉控制","稳定","核心爆发"]},
+ {o:"为任何训练层级的客户设计核心训练计划。",
+  pts:["按 OPT 进阶：稳定（平板、桥、鸟狗、死虫）→ 力量（平板变体、卷腹、抗旋转、伐木）→ 爆发（药球旋转抛、快速屈伸）。","从简到繁、无痛，结合评估结果。"],
+  kw:["OPT进阶","死虫/鸟狗","抗旋转","药球抛"]},
+ {o:"进行、描述和指导各种核心训练练习。",
+  pts:["稳定练习：平板、侧平板、桥、鸟狗、死虫，强调中立脊柱、腹内压与呼吸。","力量/爆发练习：卷腹、转体、绳索伐木、药球抛，控制离心、避免腰部代偿。"],
+  kw:["平板/桥","中立脊柱","伐木","药球抛"]}
+]},
+10:{objectives:[
+ {o:"定义平衡能力，并描述其在运动表现以及损伤风险中的作用。",
+  pts:["平衡＝维持均衡静止（静态平衡）或在移动变向中不摔倒（动态平衡）的能力。","良好平衡改善姿势控制与动作质量、提升表现、降低跌倒与踝膝损伤风险。"],
+  kw:["静态/动态平衡","姿势控制","跌倒风险"],analogy:"平衡像三脚架——支撑面、重心和本体感觉共同维持。"},
+ {o:"探讨平衡性训练的重要性。",
+  pts:["增强本体感觉、关节稳定（尤其踝、膝）与神经肌肉协调。","对运动表现、日常活动、老年人防跌倒和损伤康复都重要。"],
+  kw:["本体感觉","关节稳定","防跌倒","康复"]},
+ {o:"为各种体能水平的训练者设计循序渐进的平衡性训练计划。",
+  pts:["进阶变量：支撑面由宽到窄、由稳定到不稳定，视觉由睁眼到闭眼，由双脚到单脚，再加动作或阻力。","稳定（平面单脚站）→ 力量（平衡垫/平衡盘加动作）→ 爆发（单脚跳与落地稳定）。"],
+  kw:["支撑面","睁眼/闭眼","单脚","落地稳定"]},
+ {o:"设计计划时理解并整合研究成果中具有代表性的原理。",
+  pts:["平衡是神经、视觉、前庭与本体感觉多系统整合的结果。","遵循特异性、循序渐进与超负荷，强调动作质量与无痛。"],
+  kw:["前庭","视觉","多系统整合","特异性"]},
+ {o:"进行、描述和指导各种平衡性训练练习。",
+  pts:["静态：双脚/单脚站及加手部动作；动态：重心转移、上步、弓步、单脚落地。","器械：平衡垫、平衡盘、稳定球、悬吊，强调控制、对齐与保护。"],
+  kw:["单脚站","重心转移","平衡垫","悬吊"]}
+]},
+11:{objectives:[
+ {o:"定义快速伸缩复合（反应性）训练并描述其用途。",
+  pts:["利用快速牵张-缩短循环（SSC）：肌肉先快速离心拉长、随即向心收缩，产生更大爆发力。","用途：发展爆发力、发力率、减速与落地控制，提升跳跃、冲刺与变向表现。"],
+  kw:["牵张-缩短循环SSC","离心-向心","爆发力","发力率"],analogy:"像拉橡皮筋——先拉长储存弹性能，再猛地松手释放。"},
+ {o:"探讨快速伸缩复合训练的重要性。",
+  pts:["提升弹性能利用、神经反射速度与爆发力，增强减速缓冲能力、降低损伤风险。","是把力量转化为速度与爆发表现的关键环节。"],
+  kw:["弹性能","反射","减速缓冲","力量转化"]},
+ {o:"为各种体能水平的客户设计快速伸缩复合训练计划。",
+  pts:["前提：足够核心力量、关节稳定、活动度与平衡能力；特定慢病或功能受限者不适合。","进阶：稳定（小幅原地跳、落地稳定）→ 力量（连续跳、跳箱、交换跳）→ 爆发（深跳、单脚多向跳）。","控制量与强度、充分恢复、强调落地力学。"],
+  kw:["前提条件","落地稳定","跳箱/交换跳","深跳"]},
+ {o:"进行并指导各种快速伸缩复合训练的练习。",
+  pts:["练习：深蹲跳、弓步跳、跳上/跳下箱、连续障碍跳、蹬箱跳、单脚多向跳。","要点：落地屈膝屈髋缓冲、膝对齐脚尖、躯干稳定、质量优先。"],
+  kw:["深蹲跳","跳箱","障碍跳","落地缓冲"]}
+]},
+12:{objectives:[
+ {o:"定义并描述速度、敏捷性和快速反应训练及其目的。",
+  pts:["速度 speed：直线移动速率；敏捷性 agility：快速改变方向、节奏或速度；快速反应 quickness：对刺激快速反应并合理改变动作。","目的：提高加速、减速、变向与反应能力，提升运动表现。"],
+  kw:["速度","敏捷性","快速反应","加速/减速"],analogy:"速度是直线油门，敏捷是方向盘加刹车，快速反应是反应神经。"},
+ {o:"讨论速度、敏捷性和快速反应训练对于不同人群的重要性。",
+  pts:["对运动员提升竞技表现；对大众改善日常反应、协调、防跌倒与功能能力。","青少年与老年人亦可，需按能力调整并注意安全。"],
+  kw:["运动员","大众功能","防跌倒","安全调整"]},
+ {o:"为各种体能水平的客户设计速度、敏捷性和快速反应训练计划。",
+  pts:["前提：良好的核心、平衡、柔韧与反应训练基础。","进阶：稳定（跑姿、加速、控制）→ 力量（变向、标志桶、减速）→ 爆发（快速多向、反应灯/口令）。"],
+  kw:["跑姿","变向","标志桶","反应灯"]},
+ {o:"进行、描述并指导各种速度、敏捷性和快速反应训练的练习。",
+  pts:["速度：冲刺、抗阻/助力跑、起跑；敏捷：T字跑、折返、穿梭、绳梯；反应：听/看信号变向。","要点：充分热身、技术正确、短时高质量、充分休息、安全场地。"],
+  kw:["冲刺","T字/折返","绳梯","信号反应"]}
+]},
+13:{objectives:[
+ {o:"描述一般适应综合征（GAS）的各个阶段。",
+  pts:["警戒阶段：身体感知新刺激，出现初始反应与酸痛。","抵抗/适应阶段：身体适应刺激、机能提高。","耗竭阶段：刺激过大或恢复不足，导致疲劳、表现下降甚至受伤。"],
+  kw:["GAS","警戒","抵抗适应","耗竭"],analogy:"像拉弓——适度拉更有力，拉过头或不松手会断。"},
+ {o:"定义和描述适应性原则和专项性原则。",
+  pts:["适应性原则（SAID/超负荷）：施加超出习惯的负荷并循序渐进，身体产生相应适应。","专项性原则：效果专用于所练的动作、肌群、速度、平面与能量系统（练什么得什么）。","另有可逆性：停训即退步（用进废退）。"],
+  kw:["SAID","超负荷","专项性","可逆性"]},
+ {o:"定义稳定性、肌肉耐力、肌肉肥大、力量和爆发力。",
+  pts:["稳定性：保持姿势与控制的能力；肌肉耐力：反复或持续收缩抗疲劳（轻负荷、多次数）。","肌肥大：肌肉体积增大（中等负荷、约8–12次）；力量：能产生的最大力（大负荷、低次数）。","爆发力：单位时间发力＝力量×速度，强调快速发力率。"],
+  kw:["稳定","耐力","肥大","最大力量","爆发力"],analogy:"耐力是做很多次，力量是举很重，爆发力是又重又快。"},
+ {o:"列出并定义力量训练系统的各个阶段。",
+  pts:["单组、多组（金字塔/倒金字塔：重量与次数递增或递减）。","超级组、复合组、巨人组、循环训练、间歇训练与分化训练。","按目标选择组数、次数、负荷、节奏与休息。"],
+  kw:["金字塔","超级组","循环训练","分化训练"]}
+]},
+14:{objectives:[
+ {o:"定义并描述 OPT 模型中的关键训练变量。",
+  pts:["关键变量：频率、组数、次数、负荷（强度）、动作节奏（tempo）、休息时间、训练量、动作选择与进阶方式。","通过调整变量实现稳定、力量、爆发各层级目标。"],
+  kw:["频率/组数/次数","负荷","节奏tempo","休息","训练量"]},
+ {o:"描述 OPT 模型中的各个阶段。",
+  pts:["阶段1稳定耐力：低强度、高次数、慢节奏、强调本体感受与姿势控制。","阶段2力量耐力：稳定与力量结合；阶段3肌肥大；阶段4最大力量。","阶段5爆发力：力量动作与快速/药球爆发动作结合。"],
+  kw:["阶段1稳定","阶段2力量耐力","阶段3肥大/阶段4最大力量","阶段5爆发"]},
+ {o:"为训练的每个阶段设计训练计划。",
+  pts:["模板：热身（柔韧＋心肺）→ 核心 → 平衡 → 反应/SAQ（按层级）→ 抗阻（阶段化）→ 放松。","按评估与目标选阶段，逐级进阶、周期性安排并兼顾恢复。"],
+  kw:["计划模板","阶段化","周期","进阶"]}
+]},
+15:{objectives:[
+ {o:"定义和描述如何安全有效地使用所选练习训练方法（含各种抗阻形式和本体感受工具）。",
+  pts:["抗阻形式：自由重量（哑铃、杠铃、壶铃）、固定器械、绳索、自重、弹力带、药球。","本体感受工具：稳定球、平衡垫/盘、泡沫轴、悬吊等，增加稳定与本体感觉需求。","使用前掌握技术、安全设置与保护。"],
+  kw:["自由重量","器械/绳索","弹力带/药球","本体感受工具"]},
+ {o:"描述如何安全有效地将这些练习训练工具融入各种客户的训练计划中。",
+  pts:["依据能力、目标与环境选择工具，从稳定、简单开始逐步加难。","注意器械调节、负荷、保护与空间安全，避免代偿。"],
+  kw:["能力匹配","难度进阶","器械调节","保护"]},
+ {o:"描述如何在 OPT 模型中系统地使用这些练习训练工具。",
+  pts:["稳定层级多用本体感受工具、自重与轻负荷；力量层级用自由重量、器械、绳索加负荷；爆发层级用药球与快速动作。","工具服务于阶段目标，系统连贯进阶。"],
+  kw:["稳定-本体工具","力量-自由重量","爆发-药球","系统进阶"]}
+]},
+16:{objectives:[
+ {o:"定义和描述特定慢性疾病的形成原因和症状。",
+  pts:["常见：高血压、冠心病/外周动脉疾病、卒中、2型糖尿病、肥胖、慢阻肺/哮喘、骨关节炎、骨质疏松、癌症。","了解各病危险因素、典型症状、治疗与运动注意。"],
+  kw:["高血压","冠心病/卒中","糖尿病/肥胖","慢阻肺","关节炎/骨质疏松"]},
+ {o:"描述选定的与健康和年龄相关的活动及功能限制的特点。",
+  pts:["老年人常见肌少症、平衡下降、反应变慢、关节退变、多重用药与慢病共存。","功能受限表现为 ROM、力量、耐力、平衡或日常活动（ADL）能力下降。"],
+  kw:["肌少症","平衡/反应下降","关节退变","ADL"]},
+ {o:"了解本章疾病如何影响 OPT 模型中的运动训练变量。",
+  pts:["调整强度、动作选择、ROM、节奏、休息与监测；避免禁忌（如某些情况避免 Valsalva、过头或长时间等长）。","多用稳定、控制、低冲击，必要时取得医疗许可并与医护协作。"],
+  kw:["调整变量","禁忌动作","Valsalva","低冲击","医疗许可"]},
+ {o:"了解慢病或功能受限客户与健康客户相比，对练习的急性和慢性反应有何不同。",
+  pts:["急性：心率、血压、血糖、呼吸反应可能更剧烈，需密切监测、更长热身与放松。","慢性：进步较慢、个体差异大，需谨慎进阶与充分恢复。"],
+  kw:["急性反应","监测","慢进阶","恢复"]},
+ {o:"描述如何为慢性疾病及活动或功能受限的客户进行训练计划设计。",
+  pts:["先评估并取得必要医疗许可，设定现实、安全的目标。","以低到中等强度、可控动作起步，循序渐进、个体化，结合用药与症状，鼓励长期坚持。"],
+  kw:["医疗许可","现实目标","低中强度","个体化","长期坚持"]}
+]},
+17:{objectives:[
+ {o:"描述宏量营养素及其功能。",
+  pts:["碳水化合物：主要且高效的能量来源（约4 kcal/g），分单/双糖、复合碳水与纤维，维持血糖与肌糖原。","蛋白质：由氨基酸组成（约4 kcal/g），用于组织生长修复、酶、激素与免疫，含必需氨基酸。","脂肪：浓缩能量（约9 kcal/g），提供必需脂肪酸、协助脂溶性维生素吸收、构成细胞膜、维持饱腹感。"],
+  kw:["碳水4kcal","蛋白质/氨基酸4kcal","脂肪9kcal","必需脂肪酸"],analogy:"碳水是汽油与现金，蛋白是建材与维修队，脂肪是长期储备与润滑油。"},
+ {o:"阐述宏量营养素成分如何影响饱腹感、依从性、日常能量消耗和体重控制。",
+  pts:["蛋白质最增饱腹感、利于保肌，食物热效应（TEF）较高；纤维延缓胃排空。","总热量决定体重增减，宏量比例影响饱腹感、血糖、精力与依从性。","可持续的结构比短期极端节食更利于体重控制。"],
+  kw:["饱腹感","TEF","总热量","可持续"]},
+ {o:"为优化健康状况提供基本的营养建议。",
+  pts:["以全食物、多样、均衡为主：足量蔬果、全谷物、优质蛋白、健康脂肪。","限制添加糖、钠、反式脂肪与深加工食品，足量饮水、规律进餐、控制份量。"],
+  kw:["全食物","蔬果/全谷物","优质蛋白","少糖钠"]},
+ {o:"针对宏量营养素和成功改变身体成分的关系回答问题，并消除误解。",
+  pts:["减脂核心＝持续热量缺口＋足够蛋白＋抗阻训练保肌；增肌需略盈余＋蛋白与训练。","破除误解：碳水与脂肪并非天然致胖，没有神奇燃脂食物，极端节食不可持续。","关注长期行为与趋势，而非短期体重波动。"],
+  kw:["热量缺口","蛋白+抗阻保肌","盈余增肌","破除误解"]}
+]},
+18:{objectives:[
+ {o:"定义什么是膳食补剂，并描述其各种类别和用途。",
+  pts:["膳食补剂是口服以补充膳食的产品，含维生素、矿物质、草本、氨基酸、酶与运动营养等。","不能替代均衡饮食，不应宣称治病；类别含基础营养、运动表现、体重管理与草本。"],
+  kw:["补剂定义","维生素/矿物质","草本/氨基酸","不替代饮食"]},
+ {o:"理解针对优化健康状况的基本补剂建议。",
+  pts:["优先全食物与健康生活方式，确有摄入不足或需求时再针对性补充。","证据较常见的如维生素D（日晒/摄入不足）、Omega-3（鱼吃得少），特定人群的 B12、铁等，需个体化。"],
+  kw:["补充非替代","针对性","维D/Omega-3","个体化"]},
+ {o:"根据客观、科学的事实回答关于膳食补剂的问题。",
+  pts:["依据同行评审研究与权威立场、剂量证据，区分相关性与因果、营销与证据。","关注安全性、相互作用与第三方质量认证，警惕夸大与“天然即安全”。"],
+  kw:["科学证据","安全/相互作用","第三方认证","警惕夸大"]},
+ {o:"理解术语“机能增进”，并了解用于提高运动表现的常见物质。",
+  pts:["机能增进（ergogenic aid）：提高运动能力或恢复的物质或手段。","证据较强：一水肌酸（力量/爆发/瘦体重）、咖啡因（警觉/耐力）、蛋白/EAA、β-丙氨酸/碳酸氢钠（特定高强度缓冲）。","足量蛋白与正常饮食下，BCAA、谷氨酰胺等额外获益有限；禁用违规兴奋剂。"],
+  kw:["ergogenic","肌酸","咖啡因","β-丙氨酸","违规物质"]}
+]},
+19:{objectives:[
+ {o:"描述积极的客户体验的主要特征。",
+  pts:["建立信任、尊重、安全与支持性环境，做到积极倾听、共情、真诚与专业。","清晰沟通、及时反馈、明确期望，关注客户目标与进步，增强信心与归属感。"],
+  kw:["信任","倾听/共情","安全支持","反馈"]},
+ {o:"理解改变的阶段模型。",
+  pts:["五阶段：前意向、意向、准备、行动（<6个月）、维持（>6个月、防复发）。","按阶段匹配策略：早期重意识与动机，后期重承诺、应对与防复发。"],
+  kw:["前意向/意向","准备/行动","维持","阶段匹配"],analogy:"改变像种植物——松土、播种、浇灌、长期养护。"},
+ {o:"描述有效沟通技巧的主要特征。",
+  pts:["开放式提问、积极倾听、共情、肯定与反思，使用清晰通俗、客户为中心的语言。","运用动机式访谈与非评判态度，引导客户自己说出改变理由，妥善处理阻抗。"],
+  kw:["开放式提问","倾听/反思","动机式访谈","非评判"]},
+ {o:"描述有效 SMART 目标设定技巧的基本元素。",
+  pts:["SMART：具体、可衡量、可实现、相关、有时限。","结合长期结果目标与短期过程目标，定期回顾调整。"],
+  kw:["SMART","可衡量","过程vs结果","回顾"]}
+]},
+20:{objectives:[
+ {o:"描述不妥协的客户服务的品质与特性。",
+  pts:["客户至上：可靠守时、专业整洁、真诚关怀，提供一致、高品质、个性化服务。","主动沟通、妥善处理投诉、超越期望，建立长期信任、复购与转介绍。"],
+  kw:["客户至上","守时专业","一致高品质","口碑/转介绍"]},
+ {o:"描述寻找理想工作场所的策略。",
+  pts:["明确自身目标与价值观，调研俱乐部、工作室、自主创业、医疗/企业等场所。","评估薪资结构、客户来源、设备、文化、成长空间与位置，多渠道搜集并面试。"],
+  kw:["目标匹配","俱乐部/工作室/创业","薪资结构","成长空间"]},
+ {o:"了解写简历的过程。",
+  pts:["简历含联系方式、认证资质、教育、相关经历、技能与成就，简洁专业、针对岗位。","可附求职信，突出客户成果与岗位匹配度，校对无误。"],
+  kw:["认证资质","相关经历","针对性","求职信"]},
+ {o:"理解营销的4个P。",
+  pts:["产品（服务/课程）、价格（定价套餐）、渠道（交付地点）、促销（宣传获客）。","围绕目标客户协调4P，打造清晰价值主张与品牌。"],
+  kw:["产品","价格","渠道","促销"],analogy:"4P 像四个旋钮，要一起调到对准同一批客户。"},
+ {o:"理解基本的会员销售技巧，包括招揽新客户以及快速达成交易。",
+  pts:["建立关系、了解需求、展示价值与方案、处理异议、引导决策（体验课、限时方案）。","诚信专业、以客户利益为先，跟进促成并维护长期关系，避免高压推销。"],
+  kw:["建立关系","需求/价值","处理异议","体验课/跟进"]}
+]}
+};
+
+/* ============ 附录A：动作练习库（s=适用OPT阶段） ============ */
+const AEX=[
+{cat:"柔韧性",items:[
+ {n:"SMR 腓肠肌/比目鱼肌",s:[1,2,3,4,5],c:"踝后侧，痛点停30秒"},
+ {n:"SMR 胫骨前肌/腓骨肌",s:[1,2,3,4,5],c:"小腿前外侧"},
+ {n:"SMR 腘绳肌",s:[1,2,3,4,5],c:"慢滚，避开腘窝"},
+ {n:"SMR 髂胫束(IT)",s:[1,2,3,4,5],c:"大腿外侧"},
+ {n:"SMR 臀肌",s:[1,2,3,4,5],c:"可叠腿加压"},
+ {n:"SMR 髋屈肌",s:[1,2,3,4,5],c:"髋前侧"},
+ {n:"SMR 背阔肌/胸椎",s:[1,2,3,4,5],c:"配合深呼吸"},
+ {n:"SMR 胸肌/上斜方肌",s:[1,2,3,4,5],c:"胸前、颈肩交界"},
+ {n:"静态拉伸（各肌群）",s:[1],c:"牵至紧张感，保持30秒"},
+ {n:"主动拉伸（髋屈/腘绳/胸）",s:[2,3,4],c:"主动发力，保持1–2秒"},
+ {n:"动态拉伸（弓步转体/摆腿/最伟大拉伸）",s:[5],c:"专项、无痛、全幅度"}
+]},
+{cat:"核心",items:[
+ {n:"仰卧臀桥",s:[1],c:"臀发力，不顶腰"},
+ {n:"俯卧眼镜蛇/平板",s:[1],c:"中立脊柱，收紧腹臀"},
+ {n:"死虫/鸟狗",s:[1],c:"对侧伸展，腰贴地"},
+ {n:"侧平板",s:[1],c:"身体成直线"},
+ {n:"稳定球卷腹",s:[2,3,4],c:"中幅度，不扯颈"},
+ {n:"背部伸展",s:[2,3,4],c:"臀腿后侧链，慢"},
+ {n:"绳索卷腹/平板抬腿",s:[2,3,4],c:"抗伸展"},
+ {n:"俄罗斯转体/绳索伐木",s:[2,3,4],c:"抗旋转，躯干发力"},
+ {n:"药球旋转抛",s:[5],c:"快速转体抛接"},
+ {n:"药球过顶砸/爆发俯卧撑",s:[5],c:"快速发力，缓冲"}
+]},
+{cat:"平衡",items:[
+ {n:"单腿平衡伸展（矢状/冠状）",s:[1],c:"支撑腿微屈，对侧伸展"},
+ {n:"单腿站立/上台阶至平衡",s:[1],c:"稳定控制，不晃"},
+ {n:"单腿下蹲",s:[2,3,4],c:"膝对齐脚尖"},
+ {n:"单腿罗马尼亚硬拉",s:[2,3,4],c:"髋铰链，躯干平行"},
+ {n:"平衡垫/平衡盘单腿",s:[2,3,4],c:"增加不稳定"},
+ {n:"单脚多向跳/滑冰跳",s:[5],c:"落地缓冲稳定"},
+ {n:"跳箱单腿落地",s:[5],c:"屈膝屈髋，停稳"}
+]},
+{cat:"反应（快速伸缩）",items:[
+ {n:"蹲跳至稳定支撑",s:[1],c:"落地保持3–5秒"},
+ {n:"箱上跳下落地稳定",s:[1],c:"软落地，对齐"},
+ {n:"深蹲跳/弓步跳",s:[2,3,4],c:"连续、充分伸展"},
+ {n:"跳箱/连续障碍跳",s:[2,3,4],c:"摆臂，落地轻"},
+ {n:"交换跳/爆发俯卧撑",s:[2,3,4],c:"左右交替/推离击掌"},
+ {n:"深跳",s:[5],c:"跳下即起跳，弹性能"},
+ {n:"深跳接纵跳/单脚连续跳",s:[5],c:"最短触地时间"}
+]},
+{cat:"SAQ",items:[
+ {n:"基础跑姿/直线加速",s:[1],c:"身体前倾，摆臂"},
+ {n:"减速控制练习",s:[1],c:"小步降重心"},
+ {n:"T字跑/折返跑",s:[2,3,4],c:"快速变向，低重心"},
+ {n:"穿梭跑/绳梯练习",s:[2,3,4],c:"高频脚步，抬头"},
+ {n:"标志桶变向",s:[2,3,4],c:"内切外侧蹬地"},
+ {n:"反应灯/口令变向",s:[5],c:"对刺激即时反应"},
+ {n:"追逐跑/高速多向敏捷",s:[5],c:"全速，短时高质量"}
+]},
+{cat:"抗阻",items:[
+ {n:"稳定球下蹲+肩推（全身）",s:[1],c:"垂直负载，慢"},
+ {n:"稳定球哑铃卧推（胸）",s:[1],c:"肩胛稳定"},
+ {n:"站姿绳索划船/单腿哑铃划船（背）",s:[1],c:"不耸肩"},
+ {n:"单腿哑铃肩胛外展（肩）",s:[1],c:"肩胛后缩下沉"},
+ {n:"上台阶至平衡（腿）",s:[1],c:"前脚发力站起"},
+ {n:"卧推/俯卧撑/上斜哑铃卧推（胸）",s:[2,3,4],c:"全幅度，控离心"},
+ {n:"背阔肌下拉/哑铃划船/引体（背）",s:[2,3,4],c:"背发力，肘贴身"},
+ {n:"坐姿划船/硬拉（背/腿）",s:[2,3,4],c:"中立脊柱，髋铰链"},
+ {n:"哑铃/器械肩推、侧平举、俯身飞鸟（肩）",s:[2,3,4],c:"不借力，控重量"},
+ {n:"深蹲/腿举/弓步/腿弯举（腿）",s:[2,3,4],c:"膝随脚尖，全幅度"},
+ {n:"哑铃弯举/绳索下压/法式推举（臂）",s:[2,3,4],c:"固定大臂，隔离"},
+ {n:"药球胸前抛/爆发俯卧撑（胸）",s:[5],c:"快速发力"},
+ {n:"奥林匹克举（抓举/挺举，全身）",s:[5],c:"伸髋爆发，快速接杠"},
+ {n:"跳箱/深蹲跳（腿）",s:[5],c:"快速发力，软落地"}
+]}
+];
+
+/* ============ 附录B：OPT 五阶段训练计划 ============ */
+const BPLAN=[
+{no:1,nm:"稳定耐力",goal:"改善姿势、稳定与本体感受；初学者、减脂、康复",
+ sets:"1–3 组",reps:"12–20 次",tempo:"4/2/1（慢）",rest:"0–90 秒",load:"约 50–70% 1RM",
+ warm:"SMR＋静态拉伸（30秒）＋心肺 5–10 分",core:"稳定级：慢、12–20",bal:"稳定级：单腿平衡",
+ plyo:"落地稳定（可选）",saq:"可选",res:"不稳定/本体感受、全身与单关节、慢速完全控制",note:"无痛、重质量"},
+{no:2,nm:"力量耐力",goal:"稳定与力量结合，提升肌耐力与姿势耐力",
+ sets:"2–4 组",reps:"8–12 次",tempo:"力量 2/0/2、稳定 4/2/1",rest:"0–60 秒",load:"约 70–80% 1RM",
+ warm:"SMR＋主动拉伸（10次，1–2秒）",core:"力量级",bal:"力量级：单腿下蹲等",
+ plyo:"1 级：小幅、落地稳定",saq:"4–6 个练习",res:"每部位以超级组：力量动作＋稳定动作",note:"超级组为核心特征"},
+{no:3,nm:"肌肥大",goal:"增大肌肉体积",
+ sets:"3–4 组",reps:"6–12 次",tempo:"2/0/2（中）",rest:"0–60 秒",load:"约 75–85% 1RM",
+ warm:"SMR＋主动拉伸＋心肺",core:"2–3 级",bal:"2–3 级",
+ plyo:"2 级",saq:"6–8 个练习",res:"多关节＋单关节，分化训练，渐进超负荷",note:"总训练量较高"},
+{no:4,nm:"最大力量",goal:"提高最大肌力",
+ sets:"4–6 组",reps:"1–5 次",tempo:"1/1/1（控制下快）",rest:"3–5 分钟",load:"约 85–100% 1RM",
+ warm:"SMR＋主动＋充分专项热身",core:"3 级",bal:"3 级",
+ plyo:"2 级",saq:"可选",res:"以多关节复合动作为主，低次数大重量",note:"需扎实基础与充分恢复"},
+{no:5,nm:"爆发力",goal:"提高发力率与爆发表现",
+ sets:"3–6 组",reps:"力量 1–5、爆发 8–10",tempo:"x/x/x（快）",rest:"组内 0–60 秒、组间 3–5 分",load:"力量 85–90%、爆发 30–45%（轻快）",
+ warm:"SMR＋动态拉伸",core:"3 级",bal:"3 级",
+ plyo:"3 级（不限制）",saq:"不限制",res:"超级组：力量动作＋爆发动作（药球/快速）",note:"短时高质量，疲劳即停"}
+];
+
+/* ============ 附录D：肌肉系统功能卡（o起点/i止点/f向心/g整体） ============ */
+const DMUS=[
+{grp:"小腿与足",m:[
+ {n:"胫骨前肌",o:"胫骨外侧髁及外侧面近端2/3",i:"内侧楔骨、第1跖骨底",f:"足背屈、内翻",g:"离心减速跖屈/外翻，稳定足弓"},
+ {n:"腓肠肌",o:"股骨内、外侧髁后面",i:"跟骨（跟腱）",f:"踝跖屈、屈膝",g:"离心减速背屈，稳定踝"},
+ {n:"比目鱼肌",o:"胫骨比目鱼肌线、腓骨后面近端",i:"跟骨（跟腱）",f:"踝跖屈",g:"等长防前倾，姿势稳定"},
+ {n:"胫骨后肌",o:"胫腓骨后面、骨间膜",i:"舟骨粗隆、楔骨",f:"跖屈、内翻",g:"维持内侧纵弓"},
+ {n:"腓骨长肌",o:"腓骨外侧面上2/3",i:"内侧楔骨、第1跖骨底",f:"足外翻、辅助跖屈",g:"维持足弓，减速内翻"}
+]},
+{grp:"大腿与髋",m:[
+ {n:"臀大肌",o:"髂骨翼外面、骶尾骨后面",i:"髂胫束、股骨臀肌粗隆",f:"髋伸、外旋",g:"离心减速屈髋/内旋，稳定骶髂"},
+ {n:"臀中肌",o:"髂骨翼外面",i:"股骨大转子",f:"髋外展，前束内旋/后束外旋",g:"等长防骨盆对侧下沉，稳定髋膝"},
+ {n:"髂腰肌",o:"腰椎体侧面、髂窝",i:"股骨小转子",f:"髋屈、外旋，躯干前屈",g:"稳定髋与腰椎"},
+ {n:"内收长肌",o:"耻骨",i:"股骨粗线",f:"髋内收、辅助屈髋",g:"减速外展，稳定骨盆"},
+ {n:"阔筋膜张肌(TFL)",o:"髂前上棘",i:"经髂胫束至胫骨外侧髁",f:"屈髋、外展、内旋",g:"经IT稳定膝（紧张致膝痛）"},
+ {n:"股四头肌",o:"股直肌起髂前下棘，余起股骨",i:"胫骨粗隆（髌韧带）",f:"伸膝，股直肌助屈髋",g:"离心减速屈膝，VMO稳定髌骨"},
+ {n:"腘绳肌",o:"坐骨结节（短头起股骨粗线）",i:"腓骨头/胫骨内侧",f:"屈膝、伸髋，外旋或内旋",g:"离心减速，稳定骨盆"}
+]},
+{grp:"躯干与核心",m:[
+ {n:"竖脊肌",o:"骶骨、髂嵴、椎骨",i:"上方椎骨、肋骨、乳突",f:"脊柱伸、侧屈",g:"等长稳定脊柱，离心减速前屈"},
+ {n:"腰方肌",o:"髂嵴",i:"腰椎横突、第12肋",f:"侧屈、伸、提肋",g:"等长稳定腰椎/骨盆"},
+ {n:"腹直肌",o:"耻骨联合、耻骨嵴",i:"剑突、5–7肋软骨",f:"脊柱屈、增加腹压",g:"离心减速伸展，等长稳定"},
+ {n:"腹外斜肌/内斜肌",o:"下8肋/胸腰筋膜、髂嵴",i:"白线、髂嵴、下肋",f:"旋转（外斜对侧/内斜同侧）、侧屈、腹压",g:"等长抗旋转，稳定核心"},
+ {n:"腹横肌",o:"下6肋、胸腰筋膜、髂嵴",i:"白线、耻骨",f:"压缩腹腔、增腹内压",g:"等长稳定脊柱骨盆（束腰）"}
+]},
+{grp:"肩胛·胸背",m:[
+ {n:"胸大肌",o:"锁骨内侧、胸骨、上6肋软骨",i:"肱骨大结节嵴",f:"肩内收、内旋、水平内收",g:"减速，稳定肩"},
+ {n:"胸小肌",o:"第3–5肋",i:"肩胛骨喙突",f:"肩胛前伸、下降，提肋",g:"紧张致圆肩/胸廓出口受压"},
+ {n:"背阔肌",o:"下胸椎、胸腰筋膜、髂嵴、下肋",i:"肱骨结节间沟",f:"肩伸、内收、内旋",g:"减速，稳定"},
+ {n:"斜方肌（上/中/下）",o:"枕骨、项韧带、棘突",i:"锁骨、肩峰、肩胛冈",f:"上提/后缩/下降并上旋肩胛",g:"稳定肩胛，平衡上提"},
+ {n:"菱形肌",o:"C7–T5棘突",i:"肩胛骨内侧缘",f:"肩胛后缩、下旋",g:"稳定肩胛"},
+ {n:"前锯肌",o:"上8–9肋外面",i:"肩胛骨内侧缘（前面）",f:"肩胛前伸、上旋",g:"贴住胸壁（弱→翼状肩胛）"},
+ {n:"肩胛提肌",o:"C1–4横突",i:"肩胛骨上角",f:"肩胛上提、下旋，颈侧屈",g:"稳定颈肩"}
+]},
+{grp:"肩袖与三角肌",m:[
+ {n:"三角肌（前/中/后）",o:"锁骨外侧、肩峰、肩胛冈",i:"肱骨三角肌粗隆",f:"前屈/中外展/后伸与外旋",g:"稳定肱骨头"},
+ {n:"冈上肌",o:"冈上窝",i:"肱骨大结节上部",f:"启动肩外展",g:"稳定肱骨头（肩袖）"},
+ {n:"冈下肌/小圆肌",o:"冈下窝/肩胛骨外侧缘",i:"肱骨大结节",f:"肩外旋、水平外展",g:"稳定肱骨头，减速内旋"},
+ {n:"肩胛下肌",o:"肩胛下窝",i:"肱骨小结节",f:"肩内旋",g:"前方稳定肱骨头"}
+]},
+{grp:"臂",m:[
+ {n:"肱二头肌",o:"盂上结节、喙突",i:"桡骨粗隆、前臂筋膜",f:"屈肘、前臂旋后、助屈肩",g:"减速伸肘/旋前"},
+ {n:"肱三头肌",o:"盂下结节、肱骨后面",i:"尺骨鹰嘴",f:"伸肘，长头助肩伸",g:"减速屈肘，稳定"},
+ {n:"肱肌",o:"肱骨前面下半",i:"尺骨粗隆、冠突",f:"屈肘（主要屈肘肌）",g:"稳定肘"},
+ {n:"肱桡肌",o:"肱骨外上髁上嵴",i:"桡骨茎突",f:"屈肘、中立位调整",g:"稳定肘"}
+]}
+];
+
+/* ============ 附录E：快速检查自测题 ============ */
+const EQA=[
+{q:"过头深蹲常见代偿及可能原因？",a:"足抬起/过度旋前（腓肠肌、比目鱼肌紧，胫骨前肌、臀中肌弱）；膝内扣（臀中/大肌弱，内收、TFL紧）；臀位高、躯干前倾（髋屈肌、腓肠肌紧，臀大肌、核心弱）；手臂下落（背阔、胸、大圆肌紧，前锯肌、下斜方弱）。"},
+{q:"单腿下蹲的常见代偿？",a:"膝内扣（臀中肌弱、内收紧）、躯干晃动/骨盆倾斜（核心与髋稳定差）、足过度旋前。"},
+{q:"推（俯卧撑/站姿推）的代偿？",a:"头前伸、肩胛翼状未后缩、腰塌；多因前锯肌、下斜方、核心弱，上斜方、胸小肌紧。"},
+{q:"拉的代偿？",a:"耸肩（上斜方过度、下斜方弱）、头前伸、躯干后仰（背阔肌、核心弱）。"},
+{q:"客观评估与主观评估的区别？",a:"主观＝客户自述（健康史、目标、症状、生活方式）；客观＝教练测量（姿势、动作、体能、生理指标）。"},
+{q:"纵跳测试测什么、如何计分？",a:"下肢爆发力；站立摸高与垂直跳起摸高之差为得分，跳3次取最高。"},
+{q:"沙克技巧测试的目的与调整？",a:"单腿多向跳评估下肢神经肌肉控制与对称性；膝内扣过大者可改双腿并在表上注明。"},
+{q:"OPT 三层级五阶段的顺序？",a:"稳定（1稳定耐力）→力量（2力量耐力、3肌肥大、4最大力量）→爆发（5爆发力）。"},
+{q:"五阶段次数与休息如何速记？",a:"1:12–20/0–90秒；2:8–12/0–60秒；3:6–12/0–60秒；4:1–5/3–5分；5:力量1–5＋爆发8–10。"},
+{q:"三大供能系统与时间窗？",a:"磷酸原约0–10秒；糖酵解约10秒–2分钟；氧化2分钟以上。"},
+{q:"下交叉综合征的紧张/薄弱肌？",a:"紧张：髂腰肌、股直肌、竖脊肌；薄弱：腹肌、臀大肌、腘绳肌。"},
+{q:"上交叉综合征的紧张/薄弱肌？",a:"紧张：胸大/胸小、上斜方、肩胛提肌；薄弱：颈深屈肌、中下斜方、前锯肌、菱形肌。"},
+{q:"旋前变形综合征的特点？",a:"足过度旋前伴膝内扣、骨盆前倾；紧：腓肠/比目鱼/内收；弱：胫骨前/后、臀中肌。"},
+{q:"健康史风险如何分级？",a:"分低、中、高危；高危或出现症状者应先取得医生运动许可。"},
+{q:"每周有氧的最低推荐量？",a:"150分钟中等强度，或75分钟高强度。"},
+{q:"肌酸的作用与剂量？",a:"提高力量、爆发与瘦体重；一水肌酸每天3–5g，无需循环或冲击。"},
+{q:"减脂的核心逻辑？",a:"持续热量缺口＋足量蛋白质＋抗阻训练以保留肌肉。"},
+{q:"改变的阶段模型有哪些？",a:"前意向、意向、准备、行动、维持。"},
+{q:"SMART 目标指什么？",a:"具体、可衡量、可实现、相关、有时限。"},
+{q:"机能增进（ergogenic）证据较强的物质？",a:"一水肌酸、咖啡因、蛋白质/必需氨基酸；β-丙氨酸、碳酸氢钠对特定高强度项目有效。"}
+];
+
+/* ============ 状态与持久化 ============ */
+let cur=4, view='ch', appCur='A', mode='learn', fIdx=0, fReveal=false;
+let mastered=new Set(JSON.parse(localStorage.getItem('nasm_mastered')||'[]'));
+const saveMaster=()=>localStorage.setItem('nasm_mastered',JSON.stringify([...mastered]));
+const key=(c,i)=>'c'+c+'_o'+i;
+const isLocked=c=>!DATA[c];
+
+/* ============ 导航 ============ */
+function renderNav(){
+  let html='';
+  PARTS.forEach((p,pi)=>{
+    html+='<div class="part"><div class="pt-title">'+p.title+'</div>';
+    p.chapters.forEach(c=>{
+      const locked=isLocked(c);
+      const done=!locked && DATA[c].objectives.every((_,i)=>mastered.has(key(c,i)));
+      html+='<button class="chap '+(c===cur&&view==='ch'?'active ':'')+(locked?'locked':'')+(done?' done':'')+'" data-ch="'+c+'">'
+        +'<span class="no">'+c+'</span><span class="tt">'+CH[c]+'</span><span class="dot"></span></button>';
+    });
+    html+='</div>';
+  });
+  html+='<div class="apx-title">附录</div>';
+  APPENDIX.forEach(a=>{
+    const act=view==='app'&&appCur===a.no;
+    html+='<button class="chap '+(act?'active':'')+'" data-app="'+a.no+'"><span class="no">'+a.no+'</span><span class="tt">'+a.title+'</span><span class="dot"></span></button>';
+  });
+  document.getElementById('nav').innerHTML=html;
+  document.querySelectorAll('.chap[data-ch]').forEach(b=>b.onclick=()=>{curCh(+b.dataset.ch);closeSide();});
+  document.querySelectorAll('.chap[data-app]').forEach(b=>b.onclick=()=>{selectApp(b.dataset.app);closeSide();});
+}
+function curCh(c){cur=c;view='ch';fIdx=0;fReveal=false;renderNav();renderMain();ttsOnNav();}
+function selectApp(no){view='app';appCur=no;renderNav();renderMain();ttsOnNav();}
+
+/* ============ 语音朗读 TTS ============ */
+const ttsSynth=('speechSynthesis' in window)?window.speechSynthesis:null;
+let ttsVoices=[];
+let ttsSex='female',ttsRate=1,ttsItems=[],ttsIdx=0,ttsPlaying=false,ttsPaused=false,ttsToken=0;
+function ttsLoadVoices(){if(ttsSynth)ttsVoices=ttsSynth.getVoices();}
+if(ttsSynth){ttsLoadVoices();ttsSynth.onvoiceschanged=ttsLoadVoices;setTimeout(ttsLoadVoices,500);}
+function pickVoice(sex){
+ if(!ttsSynth)return null;
+ const vs=ttsVoices.length?ttsVoices:ttsSynth.getVoices();
+ const tw=vs.filter(v=>/zh[-_]tw/i.test(v.lang));
+ const hant=vs.filter(v=>/zh[-_]hant/i.test(v.lang));
+ const zh=vs.filter(v=>/^zh|cmn/i.test(v.lang));
+ const fRe=/female|女|ting|hanana|mei|jia|xiao|ling|yue|google/i;
+ const mRe=/male|男|tsu|zhi|gang/i;
+ function inList(l){if(sex==='male')return l.find(v=>mRe.test(v.name))||null;return l.find(v=>fRe.test(v.name))||l[0]||null;}
+ if(sex==='male')return inList(tw)||inList(hant)||inList(zh)||tw[0]||zh[0]||vs.find(v=>/^zh/i.test(v.lang))||null;
+ return inList(tw)||inList(hant)||inList(zh)||vs.find(v=>/^zh/i.test(v.lang))||null;
+}
+function buildChItems(){const d=DATA[cur];if(!d)return [];return d.objectives.map((ob,i)=>({title:'第'+(i+1)+'个目标',text:'第'+(i+1)+'个目标。'+ob.o+'。'+(ob.pts&&ob.pts.length?'要点：'+ob.pts.join('。')+'。':'')}));}
+function buildAItems(){const o=[];AEX.forEach(g=>g.items.forEach(it=>o.push({title:g.cat+' · '+it.n,text:g.cat+'。'+it.n+'。'+it.c+'。适用阶段，第'+it.s.join('、第')+'阶段。'})));return o;}
+function buildBItems(){return BPLAN.map(p=>({title:'阶段'+p.no+' '+p.nm,text:'O P T 阶段'+p.no+'，'+p.nm+'。目标：'+p.goal+'。组数'+p.sets+'，次数'+p.reps+'，节奏'+p.tempo+'，休息'+p.rest+'，强度'+p.load+'。热身：'+p.warm+'。核心：'+p.core+'。平衡：'+p.bal+'。反应：'+p.plyo+'。S A Q：'+p.saq+'。抗阻：'+p.res+'。要点：'+p.note+'。'}));}
+function buildCItems(){
+ const wEl=document.getElementById('cW'),rEl=document.getElementById('cR'),uEl=document.getElementById('cUnit');
+ if(!wEl)return [{title:'单次最大估算',text:'请先打开附录C，输入重量和次数。'}];
+ const w=parseFloat(wEl.value)||0,r=Math.min(10,Math.max(1,parseInt(rEl.value)||1)),u=uEl.value==='kg'?'公斤':'磅';
+ const br=w*36/(37-r),ep=w*(1+r/30),avg=(br+ep)/2;
+ return [{title:'单次最大估算',text:'重量'+w+u+'，能做'+r+'次。第一种公式估算'+br.toFixed(1)+'，第二种公式估算'+ep.toFixed(1)+'，平均单次最大约'+avg.toFixed(1)+u+'。'}];
+}
+function buildDItems(){const o=[];DMUS.forEach(g=>g.m.forEach(mu=>o.push({title:mu.n,text:g.grp+'。'+mu.n+'。起点：'+mu.o+'。止点：'+mu.i+'。向心功能：'+mu.f+'。整体功能：'+mu.g+'。'})));return o;}
+function buildEItems(){return EQA.map((e,i)=>({title:'第'+(i+1)+'题',text:'第'+(i+1)+'题。'+e.q+' 答案：'+e.a}));}
+function buildTTS(){
+ if(view==='ch')return {title:'第'+cur+'章 · '+CH[cur],items:buildChItems()};
+ const m={A:['附录A 动作练习库',buildAItems],B:['附录B O P T训练计划',buildBItems],C:['附录C 最大肌力转换',buildCItems],D:['附录D 肌肉系统',buildDItems],E:['附录E 考试准备材料',buildEItems]};
+ const pair=m[appCur];return {title:pair[0],items:pair[1]()};
+}
+function ttsRefresh(){const b=buildTTS();ttsItems=b.items;ttsIdx=0;document.getElementById('ttsTitle').textContent='朗读 · '+b.title;ttsUI();}
+function ttsUI(){
+ const N=ttsItems.length;
+ document.getElementById('ttsCount').textContent=N?(Math.min(ttsIdx+1,N)+' / '+N):'';
+ const active=ttsPlaying&&!ttsPaused,pb=document.getElementById('ttsPlay');
+ pb.classList.toggle('playing',active);
+ pb.innerHTML=active?'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>':'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+}
+function speakIdx(){
+ if(!ttsSynth)return;
+ if(ttsIdx>=ttsItems.length){ttsEndAll();return;}
+ const my=++ttsToken;
+ ttsSynth.cancel();
+ setTimeout(()=>{
+   if(my!==ttsToken)return;
+   const it=ttsItems[ttsIdx],u=new SpeechSynthesisUtterance(it.text),v=pickVoice(ttsSex);
+   if(v){u.voice=v;u.lang=v.lang;}else u.lang='zh-TW';
+   u.rate=ttsRate;u.pitch=1.06;
+   u.onend=()=>{if(my!==ttsToken)return;if(ttsPlaying){ttsIdx++;ttsUI();speakIdx();}};
+   u.onerror=()=>{if(my!==ttsToken)return;};
+   ttsSynth.speak(u);
+ },130);
+ ttsPlaying=true;ttsPaused=false;ttsUI();
+}
+function ttsToggle(){
+ if(!ttsSynth){ttsNote('此浏览器不支持语音朗读，建议用系统自带浏览器或 Chrome。');return;}
+ if(ttsPlaying&&!ttsPaused){ttsSynth.pause();ttsPaused=true;ttsUI();}
+ else if(ttsPaused){ttsSynth.resume();ttsPaused=false;ttsUI();}
+ else {ttsRefresh();ttsIdx=0;ttsUI();speakIdx();ttsCheckNote();}
+}
+function ttsStop(){ttsToken++;ttsPlaying=false;ttsPaused=false;if(ttsSynth)ttsSynth.cancel();ttsUI();}
+function ttsEndAll(){ttsPlaying=false;ttsPaused=false;ttsUI();}
+function ttsPrev(){if(ttsIdx>0){ttsIdx--;ttsUI();if(ttsPlaying)speakIdx();}}
+function ttsNext(){if(ttsIdx<ttsItems.length-1){ttsIdx++;ttsUI();if(ttsPlaying)speakIdx();}}
+function ttsCheckNote(){
+ const v=pickVoice(ttsSex),el=document.getElementById('ttsNote');let msg='';
+ if(!v)msg='没有找到中文语音：请在 系统设置 → 辅助功能/语言与输入 下载「中文(台灣)」语音后再点播放。';
+ else if(!/zh[-_]tw/i.test(v.lang))msg='未找到台灣腔，当前用「'+v.name+'」；可在系统语音设置下载「中文(台灣)」。';
+ else if(ttsSex==='male'&&!/male|男|tsu/i.test(v.name))msg='系统里可能没有台灣男声，已用「'+v.name+'」；可在系统语音设置下载男声。';
+ el.textContent=msg;el.classList.toggle('on',!!msg);
+}
+function ttsNote(msg){const el=document.getElementById('ttsNote');el.textContent=msg;el.classList.add('on');}
+function ttsOnNav(){ttsStop();if(document.getElementById('ttsBar').classList.contains('on'))ttsRefresh();}
+function initTTS(){
+ document.getElementById('ttsFab').onclick=()=>{ttsRefresh();document.getElementById('ttsBar').classList.add('on');document.body.classList.add('tts-on');ttsCheckNote();};
+ document.getElementById('ttsX').onclick=()=>{document.getElementById('ttsBar').classList.remove('on');document.body.classList.remove('tts-on');ttsStop();};
+ document.getElementById('ttsPlay').onclick=ttsToggle;
+ document.getElementById('ttsStop').onclick=ttsStop;
+ document.getElementById('ttsPrev').onclick=ttsPrev;
+ document.getElementById('ttsNext').onclick=ttsNext;
+ document.querySelectorAll('#ttsSex button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#ttsSex button').forEach(x=>x.classList.remove('on'));b.classList.add('on');ttsSex=b.dataset.sex;if(ttsPlaying)speakIdx();ttsCheckNote();});
+ document.querySelectorAll('#ttsRate button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#ttsRate button').forEach(x=>x.classList.remove('on'));b.classList.add('on');ttsRate=parseFloat(b.dataset.rate);if(ttsPlaying&&!ttsPaused)speakIdx();});
+}
+initTTS();
+
+/* ============ 主区 ============ */
+function partOf(c){return PARTS.findIndex(p=>p.chapters.includes(c))+1;}
+function renderAppMain(){
+  const a=APPENDIX.find(x=>x.no===appCur);
+  document.getElementById('crumb').innerHTML='附录';
+  document.getElementById('chTitle').textContent='附录 '+appCur+' · '+a.title;
+  document.getElementById('chSub').textContent='参考工具 · 重建自公开标准与 NASM 体系（非原书排版）';
+  document.getElementById('flashView').classList.remove('on');
+  document.getElementById('learnView').innerHTML=renderAppendix(appCur);
+  bindAppendix(appCur);
+}
+function renderMain(){
+  if(view==='app'){renderAppMain();return;}
+  document.getElementById('crumb').innerHTML='第'+partOf(cur)+'部分 · 第<b>'+cur+'</b>章';
+  document.getElementById('chTitle').textContent='第'+cur+'章 · '+CH[cur];
+  if(isLocked(cur)){
+    document.getElementById('chSub').textContent='待你拍「章目标」页后填充';
+    document.getElementById('learnView').innerHTML=
+      '<div class="hint-banner"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8a5310" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>'
+      +'<div>这一章还没解锁。请拍下本章开头的「章目标」页面发我（一次可拍多章），我会严格按你手中译本对齐，并把每个目标的要点、关键词和记忆类比补进来。</div></div>';
+    document.getElementById('flashView').classList.remove('on');
+  }else{
+    document.getElementById('chSub').textContent='共 '+DATA[cur].objectives.length+' 个学习目标 · 先理解，再用闪卡主动回忆';
+    renderLearn();renderFlash();
+    switchMode(mode);
+  }
+  updateProgress();
+}
+/* ============ 附录渲染与交互 ============ */
+let aCat='全部', aStage=0, bStage=1, dGrp='全部', eIdx=0, eReveal=false;
+function renderAppendix(no){
+ if(no==='A')return aHTML();
+ if(no==='B')return bHTML();
+ if(no==='C')return cHTML();
+ if(no==='D')return dHTML();
+ return eHTML();
+}
+function bindAppendix(no){
+ if(no==='A')bindA();
+ if(no==='B')bindB();
+ if(no==='C')bindC();
+ if(no==='D')bindD();
+ if(no==='E')bindE();
+}
+/* --- 附录A 动作库 --- */
+const ACATS=['全部','柔韧性','核心','平衡','反应（快速伸缩）','SAQ','抗阻'];
+function aHTML(){
+ return '<div class="ax-bar"><div class="ax-label">类别</div><div class="ax-chips" id="aCats">'
+  +ACATS.map(c=>'<button class="chip '+(aCat===c?'on':'')+'" data-cat="'+c+'">'+c+'</button>').join('')
+  +'</div><div class="ax-label">OPT 阶段</div><div class="ax-chips" id="aStages">'
+  +['全部',1,2,3,4,5].map(s=>{const v=s==='全部'?0:s;return '<button class="chip '+(aStage===v?'on':'')+'" data-st="'+v+'">'+s+'</button>';}).join('')
+  +'</div></div><div id="aList" class="ax-list">'+aListHTML()+'</div>';
+}
+function aListHTML(){
+ let rows='';
+ AEX.forEach(g=>{
+  if(aCat!=='全部'&&g.cat!==aCat)return;
+  g.items.forEach(it=>{
+   if(aStage!==0&&!it.s.includes(aStage))return;
+   rows+='<div class="ax-item"><div class="ax-name">'+it.n+'</div><div class="ax-cue">'+it.c+'</div>'
+    +'<div class="ax-stages">'+it.s.map(x=>'<span class="stg">'+x+'</span>').join('')+'</div></div>';
+  });
+ });
+ return rows||'<div class="ax-empty">该筛选下暂无动作</div>';
+}
+function bindA(){
+ document.querySelectorAll('#aCats .chip').forEach(b=>b.onclick=()=>{aCat=b.dataset.cat;refreshA();});
+ document.querySelectorAll('#aStages .chip').forEach(b=>b.onclick=()=>{aStage=+b.dataset.st;refreshA();});
+}
+function refreshA(){
+ document.querySelectorAll('#aCats .chip').forEach(b=>b.classList.toggle('on',b.dataset.cat===aCat));
+ document.querySelectorAll('#aStages .chip').forEach(b=>b.classList.toggle('on',+b.dataset.st===aStage));
+ document.getElementById('aList').innerHTML=aListHTML();
+}
+/* --- 附录B OPT 计划 --- */
+function bHTML(){
+ const tabs='<div class="ax-tabs">'+BPLAN.map(p=>'<button class="tab '+(bStage===p.no?'on':'')+'" data-b="'+p.no+'">'+p.no+' · '+p.nm+'</button>').join('')+'</div>';
+ return tabs+'<div id="bBody">'+bBodyHTML()+'</div>';
+}
+function bBodyHTML(){
+ const p=BPLAN[bStage-1];
+ const rows=[['目标',p.goal],['组数',p.sets],['次数',p.reps],['节奏',p.tempo],['休息',p.rest],['强度',p.load],
+  ['热身',p.warm],['核心',p.core],['平衡',p.bal],['反应',p.plyo],['SAQ',p.saq],['抗阻',p.res],['要点',p.note]];
+ return '<div class="b-name">阶段 '+p.no+' · '+p.nm+'</div><table class="b-table">'
+  +'<colgroup><col style="width:22%"><col style="width:78%"></colgroup><tbody>'
+  +rows.map(r=>'<tr><th>'+r[0]+'</th><td>'+r[1]+'</td></tr>').join('')+'</tbody></table>';
+}
+function bindB(){
+ document.querySelectorAll('.ax-tabs .tab').forEach(b=>b.onclick=()=>{
+  bStage=+b.dataset.b;
+  document.querySelectorAll('.ax-tabs .tab').forEach(x=>x.classList.toggle('on',+x.dataset.b===bStage));
+  document.getElementById('bBody').innerHTML=bBodyHTML();
+ });
+}
+
+/* --- 附录C 最大肌力转换（1RM计算器） --- */
+function cHTML(){
+ return '<div class="calc-card"><div class="calc-row">'
+  +'<div class="calc-field"><label>重量 w</label><input id="cW" class="calc-input" type="number" inputmode="decimal" value="100" min="1"></div>'
+  +'<div class="calc-field"><label>到力竭次数 r（1–10）</label><input id="cR" class="calc-input" type="number" inputmode="numeric" value="5" min="1" max="10"></div>'
+  +'<div class="calc-field"><label>单位</label><select id="cUnit" class="calc-input"><option value="kg">kg 公斤</option><option value="lb">lb 磅</option></select></div>'
+  +'</div><div class="rm-out" id="rmOut"></div></div>'
+  +'<div style="overflow-x:auto;margin-bottom:13px"><table class="pct-table" id="pctTable"></table></div>'
+  +'<div class="formula-note">公式：<b>Brzycki</b> 1RM = w × 36 / (37 − r)；<b>Epley</b> 1RM = w × (1 + r / 30)。r＝该重量能标准完成的次数。结果为估算，次数越少越准。百分比重量用于安排目标：≥85% 偏最大力量、约 65–80% 偏肥大、≤70% 偏耐力与技术。</div>';
+}
+function calcRM(){
+ const w=parseFloat(document.getElementById('cW').value);
+ let r=parseInt(document.getElementById('cR').value);
+ const unit=document.getElementById('cUnit').value;
+ const out=document.getElementById('rmOut'), tbl=document.getElementById('pctTable');
+ if(!(w>0)||!(r>0)){out.innerHTML='<div class="rm-box hl" style="grid-column:1/4"><div class="lb">请输入有效重量与次数</div></div>';tbl.innerHTML='';return;}
+ r=Math.min(Math.max(r,1),10);
+ const br=w*36/(37-r), ep=w*(1+r/30), avg=(br+ep)/2;
+ out.innerHTML='<div class="rm-box"><div class="lb">Brzycki</div><div class="vl">'+br.toFixed(1)+'</div></div>'
+  +'<div class="rm-box"><div class="lb">Epley</div><div class="vl">'+ep.toFixed(1)+'</div></div>'
+  +'<div class="rm-box hl"><div class="lb">估算 1RM（'+unit+'）</div><div class="vl">'+avg.toFixed(1)+'</div></div>';
+ const pcts=[100,95,90,85,80,75,70,65,60,50];
+ tbl.innerHTML='<tr><th>%1RM</th>'+pcts.map(p=>'<th>'+p+'%</th>').join('')+'</tr>'
+  +'<tr><td>'+unit+'</td>'+pcts.map(p=>'<td>'+(avg*p/100).toFixed(1)+'</td>').join('')+'</tr>';
+}
+function bindC(){
+ ['cW','cR','cUnit'].forEach(id=>{const el=document.getElementById(id);
+  el.addEventListener('input',calcRM);el.addEventListener('change',calcRM);});
+ calcRM();
+}
+/* --- 附录D 肌肉系统翻转卡 --- */
+const DGRPS=()=>['全部'].concat(DMUS.map(g=>g.grp));
+function dHTML(){
+ return '<div class="ax-bar"><div class="ax-label">部位</div><div class="ax-chips" id="dGrps">'
+  +DGRPS().map(g=>'<button class="chip '+(dGrp===g?'on':'')+'" data-g="'+g+'">'+g+'</button>').join('')
+  +'</div></div><div class="d-grid" id="dGrid">'+dGridHTML()+'</div>';
+}
+function dGridHTML(){
+ let cards='';
+ DMUS.forEach(g=>{
+  if(dGrp!=='全部'&&g.grp!==dGrp)return;
+  g.m.forEach(mu=>{
+   cards+='<div class="d-card"><div class="d-inner">'
+    +'<div class="d-front"><div class="d-fgrp">'+g.grp+'</div><div class="d-fname">'+mu.n+'</div><div class="d-hint">点击查看起止点与功能</div></div>'
+    +'<div class="d-back">'
+    +'<div class="d-sec"><b>起点</b>'+mu.o+'</div>'
+    +'<div class="d-sec"><b>止点</b>'+mu.i+'</div>'
+    +'<div class="d-sec"><b>向心（独立）</b>'+mu.f+'</div>'
+    +'<div class="d-sec"><b>整体（离心/等长）</b>'+mu.g+'</div>'
+    +'</div></div></div>';
+  });
+ });
+ return cards;
+}
+function bindDCards(){document.querySelectorAll('.d-card').forEach(c=>c.onclick=()=>c.classList.toggle('flip'));}
+function bindD(){
+ document.querySelectorAll('#dGrps .chip').forEach(b=>b.onclick=()=>{
+  dGrp=b.dataset.g;
+  document.querySelectorAll('#dGrps .chip').forEach(x=>x.classList.toggle('on',x.dataset.g===dGrp));
+  document.getElementById('dGrid').innerHTML=dGridHTML();bindDCards();
+ });
+ bindDCards();
+}
+/* --- 附录E 快速检查自测题 --- */
+function eHTML(){
+ return '<div class="eq-card"><div class="eq-progress" id="eqProg"></div><div class="eq-q" id="eqQ"></div>'
+  +'<div class="eq-a" id="eqA"></div><div class="eq-tap">点击卡片揭晓 / 遮挡答案</div></div>'
+  +'<div class="eq-nav"><button id="eqPrev">上一题</button><button id="eqReveal" class="go">揭晓</button><button id="eqNext">下一题</button></div>';
+}
+function eRender(){
+ const it=EQA[eIdx];
+ document.getElementById('eqProg').textContent='第 '+(eIdx+1)+' / '+EQA.length+' 题';
+ document.getElementById('eqQ').textContent=it.q;
+ const a=document.getElementById('eqA');a.textContent=it.a;a.classList.toggle('on',eReveal);
+ document.getElementById('eqReveal').textContent=eReveal?'遮挡':'揭晓';
+ document.getElementById('eqPrev').disabled=eIdx===0;
+ document.getElementById('eqNext').disabled=eIdx===EQA.length-1;
+}
+function bindE(){
+ eRender();
+ document.getElementById('eqReveal').onclick=()=>{eReveal=!eReveal;eRender();};
+ document.getElementById('eqPrev').onclick=()=>{if(eIdx>0){eIdx--;eReveal=false;eRender();}};
+ document.getElementById('eqNext').onclick=()=>{if(eIdx<EQA.length-1){eIdx++;eReveal=false;eRender();}};
+ const card=document.querySelector('.eq-card');
+ if(card)card.onclick=()=>{eReveal=!eReveal;eRender();};
+}
+
+function renderLearn(){
+  let html='';
+  DATA[cur].objectives.forEach((ob,i)=>{
+    const m=mastered.has(key(cur,i));
+    html+='<div class="obj-card" data-i="'+i+'">'
+      +'<button class="obj-head '+(m?'mastered':'')+'"><span class="idx">'+(i+1)+'</span>'
+      +'<span class="otx">'+ob.o+'</span>'
+      +'<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></button>'
+      +'<div class="obj-body"><ul class="pts">'+ob.pts.map(p=>'<li>'+p+'</li>').join('')+'</ul>'
+      +'<div class="kws">'+ob.kw.map(k=>'<span class="kw">'+k+'</span>').join('')+'</div>'
+      +(ob.analogy?'<div class="analogy">类比：'+ob.analogy+'</div>':'')
+      +'<div class="obj-foot"><button class="mbtn '+(m?'on':'')+'" data-m="'+i+'">'
+      +(m?'✓ 已掌握':'标记为已掌握')+'</button></div></div></div>';
+  });
+  const lv=document.getElementById('learnView');
+  lv.innerHTML=html;
+  lv.querySelectorAll('.obj-head').forEach(h=>h.onclick=()=>h.closest('.obj-card').classList.toggle('open'));
+  lv.querySelectorAll('.mbtn').forEach(b=>b.onclick=()=>toggleMaster(+b.dataset.m));
+}
+function toggleMaster(i){
+  const k=key(cur,i);mastered.has(k)?mastered.delete(k):mastered.add(k);
+  saveMaster();renderNav();renderMain();
+}
+
+/* ============ 闪卡 ============ */
+function renderFlash(){
+  const obs=DATA[cur].objectives, n=obs.length;
+  if(fIdx>n-1)fIdx=n-1;
+  const ob=obs[fIdx];fReveal=false;
+  document.getElementById('flashCount').textContent='第 '+(fIdx+1)+' / '+n+' 张';
+  document.getElementById('flashQ').textContent=ob.o;
+  document.getElementById('flashA').innerHTML='<ul>'+ob.pts.map(p=>'<li>'+p+'</li>').join('');
+  document.getElementById('flashState').textContent=mastered.has(key(cur,fIdx))?'本张已掌握':'先在脑中作答，再揭晓';
+  document.getElementById('prevCard').disabled=fIdx===0;
+  document.getElementById('nextCard').disabled=fIdx===n-1;
+  applyReveal();
+}
+function applyReveal(){
+  const fv=document.getElementById('flashView');
+  fv.classList.toggle('a',fReveal);
+  document.getElementById('revealBtn').textContent=fReveal?'再想想':'揭晓答案';
+  document.getElementById('flashTap').style.display=fReveal?'none':'block';
+}
+function switchMode(m){
+  mode=m;
+  document.getElementById('tabLearn').classList.toggle('on',m==='learn');
+  document.getElementById('tabFlash').classList.toggle('on',m==='flash');
+  document.getElementById('learnView').style.display=m==='learn'?'block':'none';
+  document.getElementById('flashView').classList.toggle('on',m==='flash'&&!isLocked(cur));
+  if(m==='flash')renderFlash();
+}
+
+/* ============ 总进度 ============ */
+function updateProgress(){
+  let total=0,done=0;
+  Object.keys(DATA).forEach(c=>DATA[c].objectives.forEach((_,i)=>{total++;if(mastered.has(key(c,i)))done++;}));
+  document.getElementById('progBar').style.width=(total?done/total*100:0)+'%';
+  document.getElementById('progTxt').textContent=done+' / '+total;
+}
+
+/* ============ 事件 ============ */
+document.getElementById('tabLearn').onclick=()=>switchMode('learn');
+document.getElementById('tabFlash').onclick=()=>switchMode('flash');
+document.getElementById('revealBtn').onclick=()=>{fReveal=!fReveal;applyReveal();};
+document.getElementById('prevCard').onclick=()=>{if(fIdx>0){fIdx--;renderFlash();}};
+document.getElementById('nextCard').onclick=()=>{const n=DATA[cur].objectives.length;if(fIdx<n-1){fIdx++;renderFlash();}};
+document.getElementById('masterCard').onclick=()=>toggleMaster(fIdx);
+const side=document.getElementById('side'),scrim=document.getElementById('scrim');
+document.getElementById('menuBtn').onclick=()=>{side.classList.add('open');scrim.classList.add('on');};
+function closeSide(){side.classList.remove('open');scrim.classList.remove('on');}
+scrim.onclick=closeSide;
+
+/* ============ 初始化 ============ */
+renderNav();renderMain();switchMode('learn');
+
+/* ===== V2 study tools: all local, no external scripts ===== */
+const v2Panel=document.getElementById('v2Panel');
+const v2Esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function v2Show(html){v2Panel.innerHTML=html;v2Panel.classList.remove('v2-hidden');v2Panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function v2Hide(){v2Panel.classList.add('v2-hidden');v2Panel.innerHTML='';}
+document.getElementById('v2Search').addEventListener('input',function(){
+ const q=this.value.trim().toLocaleLowerCase();if(!q){v2Hide();return;}
+ const hits=[];Object.entries(DATA).forEach(([c,d])=>d.objectives.forEach((o,i)=>{
+ const corpus=[CH[c],o.o,...o.pts,...o.kw].join(' ').toLocaleLowerCase();if(corpus.includes(q))hits.push({c:+c,i,o});
+ }));
+ v2Show('<h3>搜索结果 · '+hits.length+' 条</h3>'+(hits.slice(0,60).map(h=>'<button class="v2-result" data-goto="'+h.c+'" data-obj="'+h.i+'">第'+h.c+'章 · '+v2Esc(h.o.o)+'</button>').join('')||'<p>未找到相关知识点。</p>')+(hits.length>60?'<p class="v2-tag">仅显示前60条，请缩小搜索范围。</p>':''));
+ v2Panel.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{curCh(+b.dataset.goto);switchMode('learn');const card=document.querySelector('.obj-card[data-i="'+b.dataset.obj+'"]');if(card){card.classList.add('open');card.scrollIntoView({behavior:'smooth'});}v2Hide();document.getElementById('v2Search').value='';});
+});
+let v2QuizIndex=0,v2QuizReveal=false;
+function v2Quiz(){const d=DATA[cur];if(!d)return;v2QuizIndex=Math.min(v2QuizIndex,d.objectives.length-1);const ob=d.objectives[v2QuizIndex];v2Show('<h3>第'+cur+'章 · 主动回忆自测</h3><p class="v2-tag">'+(v2QuizIndex+1)+' / '+d.objectives.length+' · 自测题来自原版章目标，不是官方考试题。</p><p style="margin:14px 0;font-weight:700">'+v2Esc(ob.o)+'</p>'+(v2QuizReveal?'<ul style="padding-left:20px;line-height:1.8">'+ob.pts.map(p=>'<li>'+v2Esc(p)+'</li>').join('')+'</ul>':'<p class="v2-tag">先自己回答，再揭晓参考要点。</p>')+'<div class="v2-tools" style="margin-top:14px"><button id="v2Answer">'+(v2QuizReveal?'隐藏答案':'揭晓答案')+'</button><button id="v2Next">下一题</button></div>');document.getElementById('v2Answer').onclick=()=>{v2QuizReveal=!v2QuizReveal;v2Quiz()};document.getElementById('v2Next').onclick=()=>{v2QuizIndex=(v2QuizIndex+1)%d.objectives.length;v2QuizReveal=false;v2Quiz()};}
+document.getElementById('v2QuizBtn').onclick=()=>{v2QuizIndex=0;v2QuizReveal=false;v2Quiz()};
+const v2Figures=[
+ {title:'三大运动平面 · 示意图',desc:'矢状面：屈伸；额状面：外展内收；水平面：旋转。示意图用于概念学习，并非解剖比例图。',svg:`<svg class="v2-figure" viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三大运动平面"><rect width="620" height="220" fill="#f7f9fc"/><g font-family="sans-serif" text-anchor="middle" fill="#24304a"><g transform="translate(105 12)"><ellipse cx="0" cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><path d="M0 6L0 195" stroke="#ed8a17" stroke-width="4" stroke-dasharray="7 5"/><text y="207" font-size="14">矢状面</text></g><g transform="translate(310 12)"><ellipse cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><rect x="-54" y="12" width="108" height="180" fill="#42a68a" opacity=".22" stroke="#25886f" stroke-width="2"/><text y="207" font-size="14">额状面</text></g><g transform="translate(515 12)"><ellipse cy="31" rx="15" ry="20" fill="#d5e2f0" stroke="#657895"/><path d="M0 52V120M0 72L-32 104M0 72L32 104M0 120L-23 183M0 120L23 183" stroke="#657895" stroke-width="11" stroke-linecap="round"/><path d="M-66 88H66L44 110H-44Z" fill="#ed8a17" opacity=".45" stroke="#bb6914"/><text y="207" font-size="14">水平面</text></g></g></svg>`},
+ {title:'OPT 模型 · 五阶段',desc:'稳定耐力 → 力量耐力 → 肌肥大 → 最大力量 → 爆发力。实际训练阶段选择应基于评估与目标。',svg:`<svg class="v2-figure" viewBox="0 0 620 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OPT五阶段示意"><rect width="620" height="270" fill="#f7f9fc"/><g font-family="sans-serif" text-anchor="middle" font-size="16" font-weight="bold"><rect x="30" y="207" width="560" height="48" rx="8" fill="#d9e7f7"/><text x="310" y="237" fill="#25314d">阶段1 · 稳定耐力</text><rect x="70" y="156" width="480" height="46" rx="8" fill="#b8d9e6"/><text x="310" y="184" fill="#25314d">阶段2 · 力量耐力</text><rect x="110" y="105" width="400" height="46" rx="8" fill="#9bd0bb"/><text x="310" y="134" fill="#25314d">阶段3 · 肌肥大</text><rect x="150" y="54" width="320" height="46" rx="8" fill="#f5c987"/><text x="310" y="83" fill="#55320b">阶段4 · 最大力量</text><rect x="190" y="4" width="240" height="45" rx="8" fill="#ef8a17"/><text x="310" y="32" fill="white">阶段5 · 爆发力</text></g></svg>`},
+ {title:'能量系统 · 强度与持续时间',desc:'三种供能系统始终协同工作；不同强度和时间下主导贡献不同。下图是概念示意，不代表精确比例。',svg:`<svg class="v2-figure" viewBox="0 0 620 235" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="能量系统概念示意"><rect width="620" height="235" fill="#f7f9fc"/><g font-family="sans-serif" font-size="16"><rect x="30" y="25" width="175" height="120" rx="12" fill="#f9d6a5"/><rect x="222" y="25" width="175" height="120" rx="12" fill="#c7d9f2"/><rect x="414" y="25" width="175" height="120" rx="12" fill="#c4e8d7"/><g text-anchor="middle" font-weight="bold" fill="#24304a"><text x="117" y="75">ATP-PC</text><text x="309" y="75">糖酵解</text><text x="501" y="75">氧化系统</text><text x="117" y="107" font-size="13">短时高强度</text><text x="309" y="107" font-size="13">较短时高强度</text><text x="501" y="107" font-size="13">长时持续运动</text></g><path d="M35 170H585" stroke="#4e6081" stroke-width="3"/><path d="M580 164L590 170L580 176" stroke="#4e6081" stroke-width="3" fill="none"/><text x="35" y="195" fill="#56647c" font-size="13">持续时间较短</text><text x="477" y="195" fill="#56647c" font-size="13">持续时间较长</text><text x="310" y="220" text-anchor="middle" fill="#68748b" font-size="12">示意：不是互相独立的开关</text></g></svg>`}
+];
+document.getElementById('v2VisualBtn').onclick=()=>v2Show('<h3>原创教学图解 · 首批3张</h3>'+v2Figures.map(f=>'<section style="margin:16px 0"><h4 style="margin-bottom:8px">'+f.title+'</h4>'+f.svg+'<p class="v2-tag" style="line-height:1.7">'+f.desc+'</p></section>').join(''));
+document.getElementById('v2Export').onclick=()=>{const data={format:'nasm-cpt-v2-progress',version:1,exportedAt:new Date().toISOString(),mastered:[...mastered]};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='NASM-CPT-学习进度备份.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
+document.getElementById('v2Import').onclick=()=>document.getElementById('v2ImportFile').click();
+document.getElementById('v2ImportFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const obj=JSON.parse(await file.text());if(obj.format!=='nasm-cpt-v2-progress'||!Array.isArray(obj.mastered)||obj.mastered.some(k=>typeof k!=='string'||!/^c\d+_o\d+$/.test(k)))throw Error('备份格式无效');if(!confirm('恢复备份将覆盖本设备的已掌握记录，确定继续吗？'))return;mastered=new Set(obj.mastered);saveMaster();renderNav();renderMain();v2Show('<h3>恢复成功</h3><p>已恢复 '+mastered.size+' 条已掌握记录。</p>');}catch(err){alert('无法恢复：'+err.message);}finally{e.target.value='';}};
+
+</script>
+<script>if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
