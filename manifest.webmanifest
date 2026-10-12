@@ -1,15 +1,22 @@
 {
-  "name": "NASM-CPT 学习中心 V2",
-  "short_name": "NASM学习",
-  "start_url": "./index.html",
+  "name": "NASM-CPT 第6版 · 学习中心",
+  "short_name": "CPT学习",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f5f8",
-  "theme_color": "#16203a",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12",
   "icons": [
     {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]

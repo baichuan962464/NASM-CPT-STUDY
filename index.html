@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NASM-CPT 学习中心 V2 · 预览版</title>
 <link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b0e14"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CPT学习"><link rel="apple-touch-icon" href="icon-180.png">
 <meta name="theme-color" content="#16203a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ef8a17'/%3E%3Ctext x='32' y='45' font-size='36' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EN%3C/text%3E%3C/svg%3E">
@@ -204,6 +205,22 @@ body.tts-on{padding-bottom:150px}
 /* V2 mobile additions */
 .v2-tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.v2-tools button,.v2-tools input{border:1px solid var(--bd);background:#fff;border-radius:10px;padding:10px;font-size:13px}.v2-tools input{flex:1;min-width:160px}.v2-panel{background:white;border:1px solid var(--bd);padding:16px;border-radius:14px;margin:0 0 15px}.v2-panel h3{margin-bottom:10px}.v2-result{display:block;width:100%;padding:10px;text-align:left;background:#f6f7fb;border:0;border-radius:8px;margin:6px 0;color:#25314d}.v2-figure{max-width:100%;height:auto;border-radius:12px;background:#f7f9fc}.v2-tag{font-size:12px;color:#6b7385}.v2-hidden{display:none}.v2-status{font-size:12px;color:#57647d;margin-top:8px}button:focus-visible{outline:3px solid #ef8a17;outline-offset:2px}
 @media(max-width:560px){.topbar{align-items:flex-start}.ch-head h2{font-size:20px}.v2-tools{gap:6px}.v2-tools button{flex:1}}
+
+
+/* V2.1 mobile reading and bilingual content */
+:root{--ink:#10141d;--ink2:#191f2b}
+body{line-height:1.65}
+.v21-top{background:#10141d;color:#f4f6fa;border-radius:16px;padding:19px;margin-bottom:15px}
+.v21-top h3{color:#fff;font-size:22px;margin:5px 0 8px}.v21-top p{color:#e1e5ed;font-size:14px;line-height:1.85}
+.v21-kicker{color:#ffba70;font-size:12px;font-weight:700;letter-spacing:.5px}
+.v21-disclaimer{margin-top:12px;background:#292f3a;border-left:3px solid #f4aa51;border-radius:5px;padding:11px;font-size:12px;line-height:1.7;color:#f4e7d5}
+.v21-flow{display:flex;align-items:center;gap:5px;justify-content:space-between;margin:16px 0}.v21-flow span{background:#eef1f5;padding:12px 6px;border-radius:10px;flex:1;text-align:center;font-weight:800;font-size:14px}.v21-flow small{font-size:9px;color:#5b6578;font-weight:500}.v21-flow b{color:#e58b20}
+.v21-stage{border:1px solid #e1e5ec;border-radius:13px;padding:15px;margin:12px 0;background:#fff;box-shadow:0 3px 12px #12182708}
+.v21-stage-head{display:flex;align-items:center;gap:11px;margin-bottom:10px}.v21-stage-head strong{display:block;font-size:16px}.v21-stage-head small{display:block;font-size:11px;color:#667185;line-height:1.6}
+.v21-badge{display:grid;place-items:center;flex:0 0 36px;height:36px;border-radius:10px;background:#151b26;color:#fff;font-weight:800}
+.v21-stage p{font-size:13px;line-height:1.85;margin:5px 0;color:#394358}.v21-callout{background:#fff6e9;border-radius:12px;padding:15px;margin-top:16px;font-size:13px;line-height:1.8}
+.v21-gloss{display:grid;gap:8px;margin-top:13px}.v21-gloss>div{background:white;border:1px solid #e2e6ef;border-radius:10px;padding:12px;display:grid;gap:2px}.v21-gloss strong{font-size:14px;color:#172033}.v21-gloss span{font-size:12px;color:#69758b}.v21-gloss b{font-size:13px;color:#bc6b13}.v21-muted{font-size:12px;color:#687387}
+@media(max-width:560px){.main{padding:16px 13px 100px}.v2-tools{gap:7px}.v2-tools button{min-height:40px}.obj-head .otx{font-size:15px}.pts li{font-size:14px;line-height:1.85}.v21-flow small{font-size:8px}.v21-stage{padding:13px}}
 </style>
 </head>
 <body>
@@ -239,7 +256,7 @@ body.tts-on{padding-bottom:150px}
     </div>
 
     <div class="v2-tools" aria-label="学习工具">
-<input id="v2Search" type="search" placeholder="搜索章节、知识点…" aria-label="搜索知识点"><button id="v2QuizBtn">自测</button><button id="v2VisualBtn">图解</button><button id="v2Export">备份</button><button id="v2Import">恢复</button><input id="v2ImportFile" type="file" accept="application/json,.json" hidden>
+<input id="v2Search" type="search" placeholder="搜索章节、知识点…" aria-label="搜索知识点"><button id="v2QuizBtn">自测</button><button id="v2VisualBtn">图解</button><button id="v21OptBtn">OPT精讲</button><button id="v21GlossBtn">中英术语</button><button id="v2Export">备份</button><button id="v2Import">恢复</button><input id="v2ImportFile" type="file" accept="application/json,.json" hidden>
 </div><div id="v2Panel" class="v2-panel v2-hidden"></div>
 <div class="learn" id="learnView"></div>
     <div class="flash" id="flashView">
@@ -859,7 +876,7 @@ function speakIdx(){
  ttsSynth.cancel();
  setTimeout(()=>{
    if(my!==ttsToken)return;
-   const it=ttsItems[ttsIdx],u=new SpeechSynthesisUtterance(it.text),v=pickVoice(ttsSex);
+   const it=ttsItems[ttsIdx],u=new SpeechSynthesisUtterance(v21Speakable(it.text)),v=pickVoice(ttsSex);
    if(v){u.voice=v;u.lang=v.lang;}else u.lang='zh-TW';
    u.rate=ttsRate;u.pitch=1.06;
    u.onend=()=>{if(my!==ttsToken)return;if(ttsPlaying){ttsIdx++;ttsUI();speakIdx();}};
@@ -1181,6 +1198,28 @@ document.getElementById('v2VisualBtn').onclick=()=>v2Show('<h3>原创教学图�
 document.getElementById('v2Export').onclick=()=>{const data={format:'nasm-cpt-v2-progress',version:1,exportedAt:new Date().toISOString(),mastered:[...mastered]};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='NASM-CPT-学习进度备份.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
 document.getElementById('v2Import').onclick=()=>document.getElementById('v2ImportFile').click();
 document.getElementById('v2ImportFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const obj=JSON.parse(await file.text());if(obj.format!=='nasm-cpt-v2-progress'||!Array.isArray(obj.mastered)||obj.mastered.some(k=>typeof k!=='string'||!/^c\d+_o\d+$/.test(k)))throw Error('备份格式无效');if(!confirm('恢复备份将覆盖本设备的已掌握记录，确定继续吗？'))return;mastered=new Set(obj.mastered);saveMaster();renderNav();renderMain();v2Show('<h3>恢复成功</h3><p>已恢复 '+mastered.size+' 条已掌握记录。</p>');}catch(err){alert('无法恢复：'+err.message);}finally{e.target.value='';}};
+
+
+/* V2.1 专项教学模块：第6版导向；非官方教材逐页校勘 */
+const v21Gloss=[
+ ['OPT','Optimum Performance Training','最佳运动表现训练'],['Stabilization Endurance','Stabilization Endurance','稳定耐力'],['Strength Endurance','Strength Endurance','力量耐力'],['Muscular Development','Muscular Development','肌肉发展（常见旧版资料称肌肥大）'],['Maximal Strength','Maximal Strength','最大力量'],['Power','Power','爆发力'],['SMR','Self-Myofascial Release','自我肌筋膜放松'],['SAQ','Speed, Agility, Quickness','速度、敏捷性与快速反应'],['Tempo','Tempo','动作节奏'],['Repetition / Rep','Repetition','重复次数'],['Set','Set','组'],['Rest interval','Rest interval','组间休息'],['Plyometric','Plyometric','快速伸缩复合（反应性）训练'],['Assessment','Assessment','评估'],['Overhead Squat Assessment','Overhead Squat Assessment','过头深蹲评估'],['Concentric','Concentric','向心收缩'],['Eccentric','Eccentric','离心收缩'],['Isometric','Isometric','等长收缩'],['ROM','Range of Motion','关节活动范围'],['1RM','One-Repetition Maximum','一次重复最大重量'],['ATP-PC','ATP–Phosphocreatine System','ATP－磷酸肌酸供能系统']
+];
+const v21Stages=[
+ {no:1,en:'Stabilization Endurance',cn:'稳定耐力',focus:'建立动作控制、关节稳定与肌肉耐力。',example:'例：可控制的深蹲、单腿平衡和核心稳定练习。',check:'观察动作是否稳定、是否出现代偿；负荷不应优先于动作质量。'},
+ {no:2,en:'Strength Endurance',cn:'力量耐力',focus:'将较高负荷的力量动作与稳定性动作结合。',example:'例：传统抗阻动作与相近动作模式的稳定性练习配对。',check:'先明确动作配对的目的，再安排负荷与疲劳管理。'},
+ {no:3,en:'Muscular Development',cn:'肌肉发展',focus:'以促进肌肉增长为主要训练方向。',example:'例：按目标肌群组织抗阻练习，逐步提高有效训练量。',check:'注意第6版英文术语与旧版“Hypertrophy（肌肥大）”的称谓差异。'},
+ {no:4,en:'Maximal Strength',cn:'最大力量',focus:'提高产生高水平力量的能力。',example:'例：技术稳定后，围绕主要复合动作开展高强度抗阻训练。',check:'强调保护、恢复和动作熟练度；不适合直接照搬到所有客户。'},
+ {no:5,en:'Power',cn:'爆发力',focus:'结合力量与速度，提高快速产生力量的能力。',example:'例：力量练习与快速发力练习合理搭配。',check:'需考虑动作基础、落地控制、训练顺序与恢复。'}
+];
+function v21Opt(){
+ const blocks=v21Stages.map(st=>`<article class="v21-stage"><div class="v21-stage-head"><span class="v21-badge">${st.no}</span><div><strong>第${st.no}阶段 · ${st.cn}</strong><small>${st.en} · ${st.cn}</small></div></div><p><b>核心目标：</b>${st.focus}</p><p><b>理解示例：</b>${st.example}</p><p><b>学习提示：</b>${st.check}</p></article>`).join('');
+ v2Show(`<div class="v21-top"><span class="v21-kicker">第14章 · 专题精讲</span><h3>OPT 模型：先理解，再记忆</h3><p>OPT = Optimum Performance Training（最佳运动表现训练）。按稳定、力量、爆发三个层级组织训练；五阶段不是要求每个人机械地从一到五走完。</p><div class="v21-disclaimer">⚠️ 本页为原创辅助讲解，尚未完成与你持有的第6版教材逐页校对。训练组数、次数、节奏等数值请以教材相应表格为准。</div></div><div class="v21-flow"><span>稳定<br><small>Stabilization</small></span><b>→</b><span>力量<br><small>Strength</small></span><b>→</b><span>爆发<br><small>Power</small></span></div>${blocks}<div class="v21-callout"><b>学习方法</b><p>先说出每个阶段的主要目标，再解释它与相邻阶段的差异。能解释原因，比单纯背数字更有价值。</p></div>`);
+}
+function v21Glossary(){v2Show(`<h3>中英对照 · 专业术语速查</h3><p class="v21-muted">英语术语后均附中文释义。此表是学习辅助，不替代教材中的正式定义。</p><div class="v21-gloss">${v21Gloss.map(([short,en,cn])=>`<div><strong>${short}</strong><span>${en}</span><b>${cn}</b></div>`).join('')}</div>`)}
+document.getElementById('v21OptBtn').onclick=v21Opt;
+document.getElementById('v21GlossBtn').onclick=v21Glossary;
+// TTS 只在朗读时转换范围符号；避免改动显示文字。
+function v21Speakable(input){return String(input).replace(/(\d+)\s*[–—~～-]\s*(\d+)\s*(组|次|秒|分钟|小时|%|％)/g,(_,a,b,u)=>`${a}到${b}${u}`).replace(/(\d+)\s*[–—~～-]\s*(\d+)/g,(_,a,b)=>`${a}到${b}`).replace(/\bSMR\b/g,'自我肌筋膜放松').replace(/\bSAQ\b/g,'速度、敏捷性与快速反应').replace(/\bOPT\b/g,'最佳运动表现训练');}
 
 </script>
 <script>if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}</script>
